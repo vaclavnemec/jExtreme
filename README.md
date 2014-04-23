@@ -1,7 +1,7 @@
 jExtreme
 =========
 
-jExtreme is Java 8 library which allows to find minimum or maximum values for given function. Library offers three optimization algorithms so far:
+jExtreme is Java 8 library which allows mathematical optimization for given function. Library offers three optimization algorithms so far:
 
   - Blind Algorithm - the simplest implementation. Searches function space pseudo-randomly
   - Genetic Algorithm - probably best known algorithm. Library is implemented to use collection of Double values to represent possible solutions instead of binary arrays.
