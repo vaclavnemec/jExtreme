@@ -4,7 +4,7 @@ jExtreme
 jExtreme is Java 8 library which allows mathematical optimization for given function. Library offers three optimization algorithms so far:
 
   - Blind Algorithm - the simplest implementation. Searches function space pseudo-randomly
-  - Genetic Algorithm - probably best known algorithm. Library is implemented to use collection of Double values to represent possible solutions instead of binary arrays.
+  - Genetic Algorithm - probably very well known algorithm. Library is implemented to use collection of Double values to represent possible solutions instead of binary arrays.
   - Self Organized Migration Algorithm (SOMA) - currently there is implementation called SomaManyToOne - more detailes about algorithm can be found at its homepage http://www.ft.utb.cz/people/zelinka/soma/
 
 Example of Usage
