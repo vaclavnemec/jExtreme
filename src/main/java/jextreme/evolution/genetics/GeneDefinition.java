@@ -6,7 +6,7 @@ import java.util.Objects;
  *
  * @author Vaclav
  */
-public class GeneRange {
+public class GeneDefinition {
  
     private final Double minValue;
     private final Double maxValue;
@@ -16,7 +16,7 @@ public class GeneRange {
      * @param minValue
      * @param maxValue
      */
-    public GeneRange(Double minValue, Double maxValue) {
+    public GeneDefinition(Double minValue, Double maxValue) {
         this.minValue = minValue;
         this.maxValue = maxValue;
     }
@@ -71,7 +71,7 @@ public class GeneRange {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final GeneRange other = (GeneRange) obj;
+        final GeneDefinition other = (GeneDefinition) obj;
         if (!Objects.equals(this.minValue, other.minValue)) {
             return false;
         }

@@ -9,7 +9,7 @@ import jextreme.algorithms.BlindAlgorithm;
 import jextreme.algorithms.GeneticAlgorithm;
 import jextreme.algorithms.OptimizationAlgorithm;
 import jextreme.algorithms.SomaManyToOne;
-import jextreme.evolution.genetics.GeneRange;
+import jextreme.evolution.genetics.GeneDefinition;
 import jextreme.evolution.genetics.Genotype;
 import jextreme.evolution.genetics.crossover.ArithmeticCrossover;
 import jextreme.evolution.genetics.crossover.GeneticCrossover;
@@ -97,7 +97,7 @@ class SolutionFactoryImpl implements SolutionFactory {
 
     @Override
     public Specimen getSpecimen() {
-        return new Specimen(Arrays.asList(new GeneRange(-BORDER, BORDER), new GeneRange(-BORDER, BORDER)));
+        return new Specimen(Arrays.asList(new GeneDefinition(-BORDER, BORDER), new GeneDefinition(-BORDER, BORDER)));
     }
 
     private static final double BORDER = 600;

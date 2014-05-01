@@ -45,6 +45,7 @@ public class BlindAlgorithm extends AbstractOptimizationAlgorithm {
         for (long i = 0; i < this.amountOfEvaluations; i++) {
             final SolutionHolder randomSolution = this.createRandomSolution();
             final Double fitness = randomSolution.getSolution().getFitness();
+            System.out.println("fitness" + fitness);
             if (best == null || fitness > bestFitness) {
                 best = randomSolution.getSolution();
                 bestFitness = fitness;

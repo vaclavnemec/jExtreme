@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.*;
-import jextreme.evolution.genetics.GeneRange;
+import jextreme.evolution.genetics.GeneDefinition;
 import jextreme.evolution.genetics.Genotype;
 import jextreme.evolution.solution.Solution;
 import jextreme.evolution.solution.SolutionFactory;
@@ -91,7 +91,7 @@ public abstract class AbstractOptimizationAlgorithm implements OptimizationAlgor
     }
 
     private Genotype randomGenotype(final Specimen specimen) {
-        final List<GeneRange> geneDefinitions = specimen.getGeneRanges();
+        final List<GeneDefinition> geneDefinitions = specimen.getGeneDefinitions();
         final List<Double> genes = new ArrayList<>();
         geneDefinitions.stream().forEach((geneDefinition) -> {
             genes.add(this.random.nextDouble(geneDefinition.getMinValue(), geneDefinition.getMaxValue()));

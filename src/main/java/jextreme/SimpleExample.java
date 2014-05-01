@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import jextreme.algorithms.GeneticAlgorithm;
 import jextreme.algorithms.OptimizationAlgorithm;
-import jextreme.evolution.genetics.GeneRange;
+import jextreme.evolution.genetics.GeneDefinition;
 import jextreme.evolution.genetics.Genotype;
 import jextreme.evolution.genetics.crossover.ArithmeticCrossover;
 import jextreme.evolution.genetics.crossover.GeneticCrossover;
@@ -52,9 +52,9 @@ final SolutionFactory solutionFactory = new SolutionFactory() {
     @Override
     public Specimen getSpecimen() {
         // Specimen defines range for our searching. Both axis has same ranges
-        return new Specimen(Arrays.asList(new GeneRange(-AXIS_RANGES, AXIS_RANGES), new GeneRange(-AXIS_RANGES, AXIS_RANGES)));
+        return new Specimen(Arrays.asList(new GeneDefinition(-AXIS_RANGES, AXIS_RANGES), new GeneDefinition(-AXIS_RANGES, AXIS_RANGES)));
     }
-};
+        };
 
 // to create genetic algorithm we must specify which crossover strategies will be used
 final List<GeneticCrossover> crossovers = new ArrayList<>();

@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import jextreme.evolution.genetics.GeneRange;
+import java.util.Optional;
+import jextreme.evolution.genetics.GeneDefinition;
 import jextreme.evolution.genetics.Genotype;
 import jextreme.evolution.solution.Solution;
 import jextreme.evolution.solution.SolutionFactory;
@@ -105,8 +106,10 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
             final List<SolutionHolder> possibleSolutions = this.migrate(leader, solution);
             super.retrieveFitness(possibleSolutions);
             Collections.sort(possibleSolutions, new DescendingFitnessComparator());
-            final SolutionHolder bestVariant = possibleSolutions.iterator().next();
-            newPopulation.add(bestVariant);
+            Optional<SolutionHolder> first = possibleSolutions.stream().findFirst();
+            if (first.isPresent()) {
+                newPopulation.add(first.get());
+            }
         }
 
         return newPopulation;
@@ -147,7 +150,7 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
                         actualPosition[i] -= this.step;
                     }
                 }
-                final GeneRange geneDefinition = specimen.getGeneRanges().get(i);
+                final GeneDefinition geneDefinition = specimen.getGeneDefinitions().get(i);
                 if (geneDefinition.getMaxValue() < actualPosition[i] || geneDefinition.getMinValue() > actualPosition[i]) {
                     possibleSolutions.add(this.createRandomSolution());
                     return possibleSolutions;

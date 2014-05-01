@@ -3,7 +3,7 @@ package jextreme.optimization.apache;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import jextreme.evolution.genetics.GeneRange;
+import jextreme.evolution.genetics.GeneDefinition;
 import jextreme.evolution.solution.SolutionFactory;
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.genetics.Chromosome;
@@ -33,7 +33,7 @@ public class RandomMutationPolicy implements MutationPolicy {
 	public Chromosome mutate(final Chromosome original) throws MathIllegalArgumentException {
 		final List<Double> genes = ((DoubleChromosome) original).getRepresentation();
 		final List<Double> mutatedGenes = new ArrayList<>();
-		final Iterator<GeneRange> defs = this.solutionFactory.getSpecimen().getGeneRanges().iterator();
+		final Iterator<GeneDefinition> defs = this.solutionFactory.getSpecimen().getGeneDefinitions().iterator();
 		for (final Double gene : genes) {
 			// 1/n probability to mutate gene
 			if (this.random.nextInt(genes.size()) == 0) {
@@ -50,7 +50,7 @@ public class RandomMutationPolicy implements MutationPolicy {
      * @param geneDefinition
      * @return
      */
-    protected Double mutateGene(final GeneRange geneDefinition) {
+    protected Double mutateGene(final GeneDefinition geneDefinition) {
 		final Double mutatedGene = this.nextDouble(geneDefinition.getMinValue().doubleValue(), geneDefinition.getMaxValue().doubleValue());
 		if (geneDefinition.getMinValue().compareTo(mutatedGene) > 0 || geneDefinition.getMaxValue().compareTo(mutatedGene) < 0) {
 			throw new IllegalStateException();

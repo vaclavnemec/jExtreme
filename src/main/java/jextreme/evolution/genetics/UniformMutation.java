@@ -26,9 +26,9 @@ public class UniformMutation implements Mutation {
     public Genotype mutate(final Genotype genotype, final Specimen specimen) {
         final List<Double> genes = genotype.getGenes();
         final List<Double> mutatedGenes = new ArrayList<>();
-        final Iterator<GeneRange> defs = specimen.getGeneRanges().iterator();
+        final Iterator<GeneDefinition> defs = specimen.getGeneDefinitions().iterator();
         for (final Double gene : genes) {
-            final GeneRange nextGene = defs.next();
+            final GeneDefinition nextGene = defs.next();
             // 1/n probability to mutate gene
             if (this.random.nextInt(genes.size()) == 0) {
                 mutatedGenes.add(this.mutateGene(nextGene));
@@ -46,7 +46,7 @@ public class UniformMutation implements Mutation {
      * @param geneDefinition
      * @return
      */
-    protected Double mutateGene(final GeneRange geneDefinition) {
+    protected Double mutateGene(final GeneDefinition geneDefinition) {
         final Double mutatedGene = this.random.nextDouble(geneDefinition.getMinValue().doubleValue(), geneDefinition.getMaxValue().doubleValue());
         if (geneDefinition.getMinValue().compareTo(mutatedGene) > 0 || geneDefinition.getMaxValue().compareTo(mutatedGene) < 0) {
             throw new IllegalStateException();

@@ -94,7 +94,7 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
             if (this.isComplete()) {
                 break;
             }
-
+            
             // select elite member as a parent
             final List<SolutionHolder> eliteMembers = this.getEliteMembers(this.solutions, this.elitismRate);
 
