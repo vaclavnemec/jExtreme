@@ -16,7 +16,7 @@ import jextreme.evolution.genetics.Genotype;
  */
 public class DoubleChromosome extends AbstractListChromosome<Double> {
 
-	private final SolutionFactory solutionFactory;
+    private final SolutionFactory solutionFactory;
 
     /**
      *
@@ -24,31 +24,31 @@ public class DoubleChromosome extends AbstractListChromosome<Double> {
      * @param solutionFactory
      */
     public DoubleChromosome(final List<Double> chromosomeRepresentation, final SolutionFactory solutionFactory) {
-		super(chromosomeRepresentation);
-		this.solutionFactory = solutionFactory;
-	}
+        super(chromosomeRepresentation);
+        this.solutionFactory = solutionFactory;
+    }
 
-	@Override
-	public double fitness() {
-		final Solution createSolution = this.solutionFactory.createSolution(new Genotype(this.getRepresentation()));
-		return createSolution.getFitness();
-	}
+    @Override
+    public double fitness() {
+        final Solution createSolution = this.solutionFactory.createSolution(new Genotype(this.getRepresentation()));
+        return createSolution.getFitness();
+    }
 
-	@Override
-	protected void checkValidity(final List<Double> chromosomeRepresentation) throws InvalidRepresentationException {
-		if (chromosomeRepresentation.size() != 2) {
-			throw new InvalidRepresentationException(LocalizedFormats.INVALID_FIXED_LENGTH_CHROMOSOME, chromosomeRepresentation.size());
-		}
-	}
+    @Override
+    protected void checkValidity(final List<Double> chromosomeRepresentation) throws InvalidRepresentationException {
+        if (chromosomeRepresentation.size() < 1) {
+            throw new InvalidRepresentationException(LocalizedFormats.INVALID_FIXED_LENGTH_CHROMOSOME, chromosomeRepresentation.size());
+        }
+    }
 
-	@Override
-	public List<Double> getRepresentation() {
-		return super.getRepresentation();
-	}
+    @Override
+    public List<Double> getRepresentation() {
+        return super.getRepresentation();
+    }
 
-	@Override
-	public AbstractListChromosome<Double> newFixedLengthChromosome(final List<Double> chromosomeRepresentation) {
-		return new DoubleChromosome(chromosomeRepresentation, this.solutionFactory);
-	}
+    @Override
+    public AbstractListChromosome<Double> newFixedLengthChromosome(final List<Double> chromosomeRepresentation) {
+        return new DoubleChromosome(chromosomeRepresentation, this.solutionFactory);
+    }
 
 }
