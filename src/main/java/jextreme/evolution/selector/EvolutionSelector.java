@@ -3,6 +3,7 @@
  */
 package jextreme.evolution.selector;
 
+import jextreme.evolution.solution.Solution;
 import jextreme.evolution.solution.SolutionHolder;
 
 import java.util.List;

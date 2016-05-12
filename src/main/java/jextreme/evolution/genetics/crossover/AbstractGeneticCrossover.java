@@ -3,12 +3,9 @@
  */
 package jextreme.evolution.genetics.crossover;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jextreme.random.RandomAdapterFactory;
-import jextreme.evolution.genetics.Genotype;
+import jextreme.evolution.genetics.Genes;
 import jextreme.random.RandomAdapter;
+import jextreme.random.RandomAdapterFactory;
 
 /**
  * @author Vaclav
@@ -23,43 +20,47 @@ public abstract class AbstractGeneticCrossover implements GeneticCrossover {
 
     /**
      *
-     * @param genotype1
-     * @param genotype2
+     * @param genes1
+     * @param genes2
      * @return
      */
     @Override
-	public Genotype[] apply(final Genotype genotype1, final Genotype genotype2) {
+	public Genes[] apply(final Genes genes1, final Genes genes2) {
 
-		final List<Double> first = genotype1.getGenes();
-		final List<Double> second = genotype2.getGenes();
+		final double[] first = genes1.getGenes();
+		final double[] second = genes2.getGenes();
 
-		final List<List<Double>> m = new ArrayList<>();
+		final int size = first.length;
 
-		final int size = first.size();
+		Genes[] result = initializeResult(crossoverResultSize(), size);;
+
 		for (int i = 0; i < size; i++) {
-			final Double[] mutated = this.apply(first.get(i), second.get(i));
+			final Double[] mutated = this.apply(first[i], second[i]);
+
 			for (int j = 0; j < mutated.length; j++) {
-				if (m.size() <= j) {
-					m.add(new ArrayList<Double>());
-				}
-				m.get(j).add(mutated[j]);
+				result[j].getGenes()[i] = mutated[j];
 			}
 		}
 
-		final Genotype[] g = new Genotype[m.size()];
-		int i = 0;
-		for (final List<Double> d : m) {
-			g[i++] = new Genotype(d);
-		}
-		return g;
+		return result;
 	}
 
-    /**
+	private Genes[] initializeResult(int resultSize, int genesSize) {
+		Genes[] genes = new Genes[resultSize];
+		for (int i = 0; i < resultSize; i ++) {
+			genes[i] = new Genes(new double[genesSize]);
+		}
+		return genes;
+	}
+
+	/**
      *
      * @param d1
      * @param d2
      * @return
      */
     protected abstract Double[] apply(Double d1, Double d2);
+
+	protected abstract int crossoverResultSize();
 
 }

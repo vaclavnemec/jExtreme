@@ -3,18 +3,19 @@
  */
 package jextreme.algorithms;
 
+import jextreme.evolution.genetics.Genes;
+import jextreme.evolution.genetics.Range;
+import jextreme.evolution.solution.FitnessFunction;
+import jextreme.evolution.solution.SolutionHolder;
+import jextreme.evolution.solution.Specimen;
+import jextreme.evolution.util.DescendingFitnessComparator;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import jextreme.evolution.genetics.GeneDefinition;
-import jextreme.evolution.genetics.Genotype;
-import jextreme.evolution.solution.Solution;
-import jextreme.evolution.solution.SolutionFactory;
-import jextreme.evolution.solution.SolutionHolder;
-import jextreme.evolution.solution.Specimen;
-import jextreme.evolution.util.DescendingFitnessComparator;
 
 /**
  * @author Vaclav
@@ -35,11 +36,11 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
      * @param perturbationLevel
      * @param populationSize
      * @param amountOfMigrations
-     * @param solutionFactory
+     * @param fitnessFunction
      */
     public SomaManyToOne(final double pathLength, final double step, final double perturbationLevel, final int populationSize, final long amountOfMigrations,
-            final SolutionFactory solutionFactory) {
-        super(solutionFactory);
+            final FitnessFunction fitnessFunction, final Specimen specimen) {
+        super(fitnessFunction, specimen);
         if (pathLength <= 1) {
             throw new IllegalArgumentException("Path length should not be smaller or equal to 1");
         }
@@ -77,7 +78,7 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
      */
     
     @Override
-    public Solution getOptimumSolution() {
+    public Genes getOptimumSolution() {
         List<SolutionHolder> population = this.createRandomPopulation(this.populationSize);
         SolutionHolder leader = null;
 
@@ -95,7 +96,7 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
 
         super.release();
 
-        return leader.getSolution();
+        return leader.getGenes();
     }
 
     private List<SolutionHolder> migrate(final SolutionHolder leader, final List<SolutionHolder> population) {
@@ -116,18 +117,18 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
     }
 
     private List<SolutionHolder> migrate(final SolutionHolder leader, final SolutionHolder solution) {
-        final List<Double> leaderGenes = leader.getGenotype().getGenes();
-        final List<Double> solutionGenes = solution.getGenotype().getGenes();
+        final double[] leaderGenes = leader.getGenes().getGenes();
+        final double[] solutionGenes = solution.getGenes().getGenes();
         final List<SolutionHolder> possibleSolutions = new ArrayList<>();
 
-        final Double[] actualPosition = solutionGenes.toArray(new Double[0]);
+        final double[] actualPosition = Arrays.copyOf(solutionGenes, solutionGenes.length);
 
         // true means adding step, false subtracting step
-        final boolean[] directions = new boolean[leaderGenes.size()];
-        for (int i = 0; i < leaderGenes.size(); i++) {
-            if (actualPosition[i] < leaderGenes.get(i)) {
+        final boolean[] directions = new boolean[leaderGenes.length];
+        for (int i = 0; i < leaderGenes.length; i++) {
+            if (actualPosition[i] < leaderGenes[i]) {
                 directions[i] = true;
-            } else if (actualPosition[i] > leaderGenes.get(i)) {
+            } else if (actualPosition[i] > leaderGenes[i]) {
                 directions[i] = false;
             } else {
                 throw new RuntimeException("Has same dimension value. Think how to solve this. TODO");
@@ -140,7 +141,7 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
         
         double distance = 0.0;
         while ((distance += this.step) < targetDistance) {
-            final List<Double> possibleSolutionGenes = new ArrayList<>();
+            final double[] possibleSolutionGenes = new double[actualPosition.length];
 
             for (int i = 0; i < actualPosition.length; i++) {
                 if (this.random.nextDouble() >= this.prt) {
@@ -150,16 +151,16 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
                         actualPosition[i] -= this.step;
                     }
                 }
-                final GeneDefinition geneDefinition = specimen.getGeneDefinitions().get(i);
-                if (geneDefinition.getMaxValue() < actualPosition[i] || geneDefinition.getMinValue() > actualPosition[i]) {
+                final Range range = specimen.getRanges()[i];
+                if (range.getMaxValue() < actualPosition[i] || range.getMinValue() > actualPosition[i]) {
                     possibleSolutions.add(this.createRandomSolution());
                     return possibleSolutions;
                 } else {
-                    possibleSolutionGenes.add(actualPosition[i]);
+                    possibleSolutionGenes[i] = actualPosition[i];
                 }
             }
 
-            possibleSolutions.add(this.createSolution(new Genotype(possibleSolutionGenes)));
+            possibleSolutions.add(this.createSolution(new Genes(possibleSolutionGenes)));
         }
 
         return possibleSolutions;
@@ -176,12 +177,10 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
 
     private Double getDistance(SolutionHolder leader, SolutionHolder solution) {
         double sum = .0;
-        Iterator<Double> leaderIterator = leader.getGenotype().getGenes().iterator();
-        Iterator<Double> solutionIterator = solution.getGenotype().getGenes().iterator();
-        while (leaderIterator.hasNext()) {
-            Double leaderGene = leaderIterator.next();
-            Double solutionGene = solutionIterator.next();
-            sum += Math.pow(leaderGene - solutionGene, 2);
+        double[] leaderPosition = leader.getGenes().getGenes();
+        double[] solutionPosition = solution.getGenes().getGenes();
+        for (int i = 0; i < leaderPosition.length; i++) {
+            sum += Math.pow(leaderPosition[i] - solutionPosition[i], 2);
         }
         return Math.sqrt(sum);
     }

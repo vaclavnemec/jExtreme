@@ -6,6 +6,7 @@ package jextreme.evolution.genetics.crossover;
  */
 public class UniformCrossover extends AbstractGeneticCrossover {
 
+	public static final int RESULT_SIZE = 2;
 	private final double crossoverRatio;
 
     /**
@@ -33,5 +34,10 @@ public class UniformCrossover extends AbstractGeneticCrossover {
 			pair[1] = d2;
 		}
 		return pair;
+	}
+
+	@Override
+	protected int crossoverResultSize() {
+		return RESULT_SIZE;
 	}
 }

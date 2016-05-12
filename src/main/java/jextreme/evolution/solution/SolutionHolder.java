@@ -3,7 +3,8 @@
  */
 package jextreme.evolution.solution;
 
-import jextreme.evolution.genetics.Genotype;
+import jextreme.evolution.genetics.Genes;
+
 import java.util.Objects;
 
 /**
@@ -21,7 +22,7 @@ public class SolutionHolder {
 
     private Integer id;
 
-    private Genotype genotype;
+    private Genes genes;
 
     /**
      *
@@ -107,16 +108,16 @@ public class SolutionHolder {
      *
      * @return
      */
-    public Genotype getGenotype() {
-        return genotype;
+    public Genes getGenes() {
+        return genes;
     }
 
     /**
      *
-     * @param genotype
+     * @param genes
      */
-    public void setGenotype(Genotype genotype) {
-        this.genotype = genotype;
+    public void setGenes(Genes genes) {
+        this.genes = genes;
     }
 
     /**
@@ -125,7 +126,7 @@ public class SolutionHolder {
      */
     @Override
     public String toString() {
-        return "SolutionHolder{" + "scaledFitness=" + scaledFitness + ", probabilityToBeParent=" + probabilityToBeParent + ", solution=" + solution + ", fitness=" + fitness + ", id=" + id + ", genotype=" + genotype + '}';
+        return "SolutionHolder{" + "scaledFitness=" + scaledFitness + ", probabilityToBeParent=" + probabilityToBeParent + ", solution=" + solution + ", fitness=" + fitness + ", id=" + id + ", genotype=" + genes + '}';
     }
 
     /**
@@ -140,7 +141,7 @@ public class SolutionHolder {
         hash = 89 * hash + Objects.hashCode(this.solution);
         hash = 89 * hash + Objects.hashCode(this.fitness);
         hash = 89 * hash + Objects.hashCode(this.id);
-        hash = 89 * hash + Objects.hashCode(this.genotype);
+        hash = 89 * hash + Objects.hashCode(this.genes);
         return hash;
     }
 
@@ -173,7 +174,7 @@ public class SolutionHolder {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.genotype, other.genotype)) {
+        if (!Objects.equals(this.genes, other.genes)) {
             return false;
         }
         return true;

@@ -1,20 +1,15 @@
 package jextreme;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import jextreme.algorithms.GeneticAlgorithm;
 import jextreme.algorithms.OptimizationAlgorithm;
-import jextreme.evolution.genetics.GeneDefinition;
-import jextreme.evolution.genetics.Genotype;
+import jextreme.evolution.genetics.Genes;
+import jextreme.evolution.genetics.Range;
 import jextreme.evolution.genetics.crossover.ArithmeticCrossover;
-import jextreme.evolution.genetics.crossover.GeneticCrossover;
 import jextreme.evolution.genetics.crossover.UniformCrossover;
-import jextreme.evolution.solution.Solution;
-import jextreme.evolution.solution.SolutionFactory;
 import jextreme.evolution.solution.Specimen;
-import jextreme.functions.AxisParallelHyperEllipsoid;
 import jextreme.listener.ConsoleEvolutionListener;
+
+import java.util.Arrays;
 
 /**
  * Example of usage. Optimization of AxisParallelHyperEllipsoid function with
@@ -39,38 +34,28 @@ public class SimpleExample {
      */
     public static final void main(String... args) {
 
-// first we must create solution factory
-final SolutionFactory solutionFactory = new SolutionFactory() {
+        // we need couple of other parameters like population size, number of generations,
+        // mutation ratio and elitsm ratio to create genetic algorithm instance
+        final OptimizationAlgorithm algorithm =
+                new GeneticAlgorithm(
+                        genes -> {
+                            double d1 = genes.getGenes()[0];
+                            double d2 = genes.getGenes()[1];
+                            return -((d1 * d1) + (d1 * d1 + d2 * d2));
+                        },
+                        new Specimen(new Range[] {new Range(-AXIS_RANGES, AXIS_RANGES), new Range(-AXIS_RANGES, AXIS_RANGES)}),
+                        Arrays.asList(new ArithmeticCrossover(), new UniformCrossover(0.2)),
+                        new ConsoleEvolutionListener(),
+                        POPULATION_SIZE,
+                        NUMBER_OF_GENERATIONS,
+                        MUTATION_RATIO,
+                        ELITISM_RATE);
 
-    @Override
-    public Solution createSolution(Genotype genotype) {
-        // each solution will be instance of AxisParallelHyperEllipsoid
-        // genotype 
-        return new AxisParallelHyperEllipsoid(genotype);
+        // in this moment the genetic algorithm will do its work
+        Genes optimumSolution = algorithm.getOptimumSolution();
+
+        // and the best solution should be somewhere around zero
+        System.out.println("BEST FOUND SOLUTION: " + Arrays.toString(optimumSolution.getGenes()));
     }
-
-    @Override
-    public Specimen getSpecimen() {
-        // Specimen defines range for our searching. Both axis has same ranges
-        return new Specimen(Arrays.asList(new GeneDefinition(-AXIS_RANGES, AXIS_RANGES), new GeneDefinition(-AXIS_RANGES, AXIS_RANGES)));
-    }
-        };
-
-// to create genetic algorithm we must specify which crossover strategies will be used
-final List<GeneticCrossover> crossovers = new ArrayList<>();
-crossovers.add(new ArithmeticCrossover());
-crossovers.add(new UniformCrossover(0.2));
-
-// we need couple of other parameters like population size, number of generations,
-// mutation ratio and elitsm ratio to create genetic algorithm instance
-final OptimizationAlgorithm algorithm = 
-        new GeneticAlgorithm(solutionFactory, crossovers, new ConsoleEvolutionListener(),
-                POPULATION_SIZE, NUMBER_OF_GENERATIONS, MUTATION_RATIO, ELITISM_RATE);
-
-// in this moment the genetic algorithm will do its work
-final AxisParallelHyperEllipsoid bestFoundSolution = (AxisParallelHyperEllipsoid) algorithm.getOptimumSolution();
-// and the best solution should be somewhere around zero
-System.out.println("BEST FOUND SOLUTION: " + bestFoundSolution); 
-   }
 
 }

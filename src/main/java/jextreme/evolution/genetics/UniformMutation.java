@@ -1,12 +1,8 @@
 package jextreme.evolution.genetics;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import jextreme.random.RandomAdapterFactory;
 import jextreme.evolution.solution.Specimen;
 import jextreme.random.RandomAdapter;
+import jextreme.random.RandomAdapterFactory;
 
 /**
  *
@@ -23,32 +19,32 @@ public class UniformMutation implements Mutation {
      * @return
      */
     @Override
-    public Genotype mutate(final Genotype genotype, final Specimen specimen) {
-        final List<Double> genes = genotype.getGenes();
-        final List<Double> mutatedGenes = new ArrayList<>();
-        final Iterator<GeneDefinition> defs = specimen.getGeneDefinitions().iterator();
-        for (final Double gene : genes) {
-            final GeneDefinition nextGene = defs.next();
+    public Genes mutate(final Genes genotype, final Specimen specimen) {
+        final double[] genes = genotype.getGenes();
+        final double[] mutatedGenes = new double[genes.length];
+        final Range[] ranges = specimen.getRanges();
+        for (int i = 0 ; i < genes.length; i ++) {
+            final Range nextGene = ranges[i];
             // 1/n probability to mutate gene
-            if (this.random.nextInt(genes.size()) == 0) {
-                mutatedGenes.add(this.mutateGene(nextGene));
-				// System.err.println("orig: " + gene + " mutated: " +
+            if (this.random.nextInt(genes.length) == 0) {
+                mutatedGenes[i] = this.mutateGene(nextGene);
+                // System.err.println("orig: " + gene + " mutated: " +
                 // mutatedGenes.get(mutatedGenes.size() - 1));
             } else {
-                mutatedGenes.add(gene);
+                mutatedGenes[i] = genes[i];
             }
         }
-        return new Genotype(mutatedGenes);
+        return new Genes(mutatedGenes);
     }
 
     /**
      *
-     * @param geneDefinition
+     * @param range
      * @return
      */
-    protected Double mutateGene(final GeneDefinition geneDefinition) {
-        final Double mutatedGene = this.random.nextDouble(geneDefinition.getMinValue().doubleValue(), geneDefinition.getMaxValue().doubleValue());
-        if (geneDefinition.getMinValue().compareTo(mutatedGene) > 0 || geneDefinition.getMaxValue().compareTo(mutatedGene) < 0) {
+    protected double mutateGene(final Range range) {
+        final double mutatedGene = this.random.nextDouble(range.getMinValue(), range.getMaxValue());
+        if (range.getMinValue() > mutatedGene || range.getMaxValue() < mutatedGene) {
             throw new IllegalStateException();
         }
         return mutatedGene;

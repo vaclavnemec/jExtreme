@@ -1,7 +1,7 @@
 package jextreme.functions;
 
 import jextreme.evolution.solution.Solution;
-import jextreme.evolution.genetics.Genotype;
+import jextreme.evolution.genetics.Genes;
 
 /**
  *
@@ -22,5 +22,5 @@ public abstract class AbstractTestFuntion implements Solution {
      *
      * @return
      */
-    public abstract Genotype getGenotype();
+    public abstract Genes getGenotype();
 }

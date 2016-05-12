@@ -1,15 +1,16 @@
 package jextreme.algorithms;
 
-import jextreme.evolution.genetics.Genotype;
+import jextreme.evolution.genetics.Genes;
 import jextreme.evolution.genetics.Mutation;
 import jextreme.evolution.genetics.UniformMutation;
 import jextreme.evolution.genetics.crossover.GeneticCrossover;
 import jextreme.evolution.selector.EvolutionSelector;
 import jextreme.evolution.selector.RankEvolutionSelector;
-import jextreme.evolution.solution.Solution;
-import jextreme.evolution.solution.SolutionFactory;
+import jextreme.evolution.solution.FitnessFunction;
 import jextreme.evolution.solution.SolutionHolder;
+import jextreme.evolution.solution.Specimen;
 import jextreme.evolution.util.DescendingFitnessComparator;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -38,7 +39,7 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
 
     /**
      *
-     * @param solutionFactory
+     * @param fitnesFunction
      * @param crossovers
      * @param evolutionListener
      * @param populationSize
@@ -46,9 +47,9 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
      * @param mutationRate
      * @param elitismRate
      */
-    public GeneticAlgorithm(final SolutionFactory solutionFactory, final List<GeneticCrossover> crossovers, EvolutionListener evolutionListener, final int populationSize,
-            final long steps, final double mutationRate, final double elitismRate) {
-        super(solutionFactory);
+    public GeneticAlgorithm(final FitnessFunction fitnesFunction, final Specimen specimen, final List<GeneticCrossover> crossovers, EvolutionListener evolutionListener, final int populationSize,
+                            final long steps, final double mutationRate, final double elitismRate) {
+        super(fitnesFunction, specimen);
         this.crossovers = crossovers;
         this.populationSize = populationSize;
         this.maximumNumberOfSteps = steps;
@@ -73,7 +74,7 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
      * @return
      */
     @Override
-    public Solution getOptimumSolution() {
+    public Genes getOptimumSolution() {
         // generates null population pseudo-randomly
         this.solutions = this.createRandomPopulation(this.populationSize);
 
@@ -110,7 +111,7 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
 
         this.release();
 
-        return this.solutions.iterator().next().getSolution();
+        return this.solutions.iterator().next().getGenes();
     }
 
     private List<SolutionHolder> getEliteMembers(final List<SolutionHolder> solutions, final double elitismRate) {
@@ -142,23 +143,23 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
 
             final Iterator<SolutionHolder> parents = this.selectParents(solutions).iterator();
 
-            final SolutionHolder first = parents.next();
+            final SolutionHolder firstParent = parents.next();
 
-            final SolutionHolder second = parents.next();
+            final SolutionHolder secondParent = parents.next();
 
             final GeneticCrossover crossover = this.selectCrossoverUniformly();
 
-            final Genotype[] genotypes = crossover.apply(first.getGenotype(), second.getGenotype());
+            final Genes[] genes = crossover.apply(firstParent.getGenes(), secondParent.getGenes());
 
-            for (final Genotype genotype : genotypes) {
+            for (final Genes g : genes) {
                 if (newSolutions.size() >= populationAmount) {
                     break;
                 }
                 if (this.random.nextDouble() < mutationRate) {
-                    final Genotype mutatedGenotype = this.mutation.mutate(genotype, super.getSpecimen());
-                    newSolutions.add(this.createSolution(mutatedGenotype));
+                    final Genes mutatedGenes = this.mutation.mutate(g, super.getSpecimen());
+                    newSolutions.add(this.createSolution(mutatedGenes));
                 } else {
-                    newSolutions.add(this.createSolution(genotype));
+                    newSolutions.add(this.createSolution(g));
                 }
             }
         }

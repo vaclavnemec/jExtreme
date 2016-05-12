@@ -1,35 +1,33 @@
 package jextreme.evolution.solution;
 
-import java.util.Collections;
-import java.util.List;
-import jextreme.evolution.genetics.GeneDefinition;
+import jextreme.evolution.genetics.Range;
 
 /**
  * @author Vaclav
  */
 public class Specimen {
 
-    private final List<GeneDefinition> geneDefinitions;
+    private final Range[] ranges;
 
     /**
      * @return
      */
     @Override
     public String toString() {
-        return this.geneDefinitions.toString();
+        return this.ranges.toString();
     }
 
     /**
-     * @param geneRanges
+     * @param ranges
      */
-    public Specimen(final List<GeneDefinition> geneRanges) {
-        this.geneDefinitions = Collections.unmodifiableList(geneRanges);
+    public Specimen(final Range[] ranges) {
+        this.ranges = ranges;
     }
 
     /**
      * @return the genesRanges
      */
-    public List<GeneDefinition> getGeneDefinitions() {
-        return this.geneDefinitions;
+    public Range[] getRanges() {
+        return this.ranges;
     }
 }

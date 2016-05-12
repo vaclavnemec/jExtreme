@@ -1,8 +1,9 @@
 package jextreme.algorithms;
 
-import jextreme.evolution.solution.Solution;
-import jextreme.evolution.solution.SolutionFactory;
+import jextreme.evolution.genetics.Genes;
+import jextreme.evolution.solution.FitnessFunction;
 import jextreme.evolution.solution.SolutionHolder;
+import jextreme.evolution.solution.Specimen;
 
 /**
  *
@@ -14,11 +15,11 @@ public class BlindAlgorithm extends AbstractOptimizationAlgorithm {
 
     /**
      *
-     * @param solutionFactory
+     * @param fitnessFunction
      * @param amountOfEvaluations
      */
-    public BlindAlgorithm(final SolutionFactory solutionFactory, final long amountOfEvaluations) {
-        super(solutionFactory);
+    public BlindAlgorithm(final FitnessFunction fitnessFunction, final Specimen specimen, final long amountOfEvaluations) {
+        super(fitnessFunction, specimen);
         if (amountOfEvaluations <= 0) {
             throw new IllegalArgumentException("Negative amount of evaluations");
         }
@@ -39,18 +40,17 @@ public class BlindAlgorithm extends AbstractOptimizationAlgorithm {
      * @return
      */
     @Override
-    public Solution getOptimumSolution() {
-        Solution best = null;
+    public Genes getOptimumSolution() {
+        SolutionHolder best = null;
         Double bestFitness = null;
         for (long i = 0; i < this.amountOfEvaluations; i++) {
             final SolutionHolder randomSolution = this.createRandomSolution();
             final Double fitness = randomSolution.getSolution().getFitness();
-            System.out.println("fitness" + fitness);
             if (best == null || fitness > bestFitness) {
-                best = randomSolution.getSolution();
+                best = randomSolution;
                 bestFitness = fitness;
             }
         }
-        return best;
+        return best.getGenes();
     }
 }

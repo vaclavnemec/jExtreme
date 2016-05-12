@@ -3,7 +3,7 @@
  */
 package jextreme.evolution.genetics.crossover;
 
-import jextreme.evolution.genetics.Genotype;
+import jextreme.evolution.genetics.Genes;
 
 /**
  * @author Vaclav
@@ -13,10 +13,10 @@ public interface GeneticCrossover {
 
     /**
      *
-     * @param genotype1
-     * @param genotype2
+     * @param genes1
+     * @param genes2
      * @return
      */
-    Genotype[] apply(Genotype genotype1, Genotype genotype2);
+    Genes[] apply(Genes genes1, Genes genes2);
 
 }

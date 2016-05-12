@@ -1,17 +1,22 @@
 package jextreme.algorithms;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.*;
-import jextreme.evolution.genetics.GeneDefinition;
-import jextreme.evolution.genetics.Genotype;
+import jextreme.evolution.genetics.Genes;
+import jextreme.evolution.genetics.Range;
+import jextreme.evolution.solution.FitnessFunction;
 import jextreme.evolution.solution.Solution;
-import jextreme.evolution.solution.SolutionFactory;
 import jextreme.evolution.solution.SolutionHolder;
 import jextreme.evolution.solution.Specimen;
 import jextreme.random.RandomAdapter;
 import jextreme.random.RandomAdapterFactory;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  *
@@ -24,10 +29,11 @@ public abstract class AbstractOptimizationAlgorithm implements OptimizationAlgor
 
     /**
      *
-     * @param solutionFactory
+     * @param fitnessFunction
      */
-    public AbstractOptimizationAlgorithm(final SolutionFactory solutionFactory) {
-        this.solutionFactory = solutionFactory;
+    public AbstractOptimizationAlgorithm(FitnessFunction fitnessFunction, final Specimen specimen) {
+        this.fitnessFunction = fitnessFunction;
+        this.specimen = specimen;
     }
 
     /**
@@ -35,32 +41,39 @@ public abstract class AbstractOptimizationAlgorithm implements OptimizationAlgor
      */
     protected final RandomAdapter random = RandomAdapterFactory.getInstance();
 
-    private final SolutionFactory solutionFactory;
+    protected final FitnessFunction fitnessFunction;
 
-    private Specimen specimen;
+    protected final Specimen specimen;
 
     /**
      *
      * @return
      */
     public Specimen getSpecimen() {
-        if (this.specimen == null) {
-            this.specimen = this.solutionFactory.getSpecimen();
-        }
         return this.specimen;
     }
 
     /**
      *
-     * @param genotype
+     * @param genes
      * @return
      */
-    public SolutionHolder createSolution(final Genotype genotype) {
-        final Solution solution = this.solutionFactory.createSolution(genotype);
+    public SolutionHolder createSolution(final Genes genes) {
+        final Solution solution = getSolution(genes);
         final SolutionHolder holder = new SolutionHolder();
         holder.setSolution(solution);
-        holder.setGenotype(genotype);
+        holder.setGenes(genes);
         return holder;
+    }
+
+    private Solution getSolution(Genes genes) {
+        final Double fitness = fitnessFunction.apply(genes);
+        return new Solution() {
+            @Override
+            public Double getFitness() {
+                return fitness;
+            }
+        };
     }
 
     /**
@@ -83,20 +96,23 @@ public abstract class AbstractOptimizationAlgorithm implements OptimizationAlgor
     public SolutionHolder createRandomSolution() {
         final SolutionHolder holder = new SolutionHolder();
 
-        final Genotype randomGenotype = this.randomGenotype(this.getSpecimen());
-        holder.setSolution(this.solutionFactory.createSolution(randomGenotype));
+        final Genes randomGenes = this.randomGenotype(this.getSpecimen());
 
-        holder.setGenotype(randomGenotype);
+        holder.setSolution(getSolution(randomGenes));
+
+        holder.setGenes(randomGenes);
         return holder;
     }
 
-    private Genotype randomGenotype(final Specimen specimen) {
-        final List<GeneDefinition> geneDefinitions = specimen.getGeneDefinitions();
-        final List<Double> genes = new ArrayList<>();
-        geneDefinitions.stream().forEach((geneDefinition) -> {
-            genes.add(this.random.nextDouble(geneDefinition.getMinValue(), geneDefinition.getMaxValue()));
-        });
-        return new Genotype(genes);
+    private Genes randomGenotype(final Specimen specimen) {
+        Range[] ranges = specimen.getRanges();
+        int length = ranges.length;
+        double[] genes = new double[length];
+        for (int i = 0; i < length; i ++) {
+            Range range = ranges[i];
+            genes[i] = this.random.nextDouble(range.getMinValue(), range.getMaxValue());
+        }
+        return new Genes(genes);
     }
 
     /**

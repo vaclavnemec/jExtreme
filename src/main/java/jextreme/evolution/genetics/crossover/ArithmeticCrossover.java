@@ -20,4 +20,9 @@ public class ArithmeticCrossover extends AbstractGeneticCrossover {
 		return new Double[] { (g1 + g2) / 2 };
 	}
 
+	@Override
+	protected int crossoverResultSize() {
+		return 1;
+	}
+
 }

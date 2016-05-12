@@ -3,28 +3,19 @@
  */
 package jextreme.evolution.genetics;
 
-import java.util.List;
-
 /**
  * @author Vaclav
  * 
  */
-public class Genotype {
-	private List<Double> genes;
+public class Genes {
+
+	final double[] genes;
 
     /**
      *
      * @param genes
      */
-    public Genotype(final List<Double> genes) {
-		this.genes = genes;
-	}
-
-    /**
-     *
-     * @param genes
-     */
-    public void setGenes(final List<Double> genes) {
+    public Genes(final double[] genes) {
 		this.genes = genes;
 	}
 
@@ -32,7 +23,7 @@ public class Genotype {
      *
      * @return
      */
-    public List<Double> getGenes() {
+    public double[] getGenes() {
 		return this.genes;
 	}
 

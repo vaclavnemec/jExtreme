@@ -1,6 +1,6 @@
 package jextreme.algorithms;
 
-import jextreme.evolution.solution.Solution;
+import jextreme.evolution.genetics.Genes;
 
 /**
  * @author Vaclav
@@ -11,5 +11,5 @@ public interface OptimizationAlgorithm {
      *
      * @return
      */
-    Solution getOptimumSolution();
+    Genes getOptimumSolution();
 }

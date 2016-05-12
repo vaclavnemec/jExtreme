@@ -10,10 +10,10 @@ public interface Mutation {
 
     /**
      *
-     * @param genotype
+     * @param genes
      * @param specimen
      * @return
      */
-    Genotype mutate(Genotype genotype, Specimen specimen);
+    Genes mutate(Genes genes, Specimen specimen);
 
 }

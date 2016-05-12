@@ -3,9 +3,12 @@
  */
 package jextreme.algorithms;
 
+import jextreme.evolution.solution.Solution;
 import jextreme.evolution.solution.SolutionHolder;
 
 import java.util.List;
+
+import static javafx.scene.input.KeyCode.T;
 
 /**
  * @author Vaclav
