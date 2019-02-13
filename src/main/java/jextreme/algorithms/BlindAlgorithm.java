@@ -1,9 +1,8 @@
 package jextreme.algorithms;
 
+import jextreme.algorithms.params.BlindAlgorithmParams;
 import jextreme.evolution.genetics.Genes;
-import jextreme.evolution.solution.FitnessFunction;
 import jextreme.evolution.solution.SolutionHolder;
-import jextreme.evolution.solution.Specimen;
 
 /**
  *
@@ -13,17 +12,12 @@ public class BlindAlgorithm extends AbstractOptimizationAlgorithm {
 
     private final long amountOfEvaluations;
 
-    /**
-     * @param fitnessFunction the function to be optimised
-     * @param specimen the specimen for the solution
-     * @param amountOfEvaluations
-     */
-    public BlindAlgorithm(final FitnessFunction fitnessFunction, final Specimen specimen, final long amountOfEvaluations) {
-        super(fitnessFunction, specimen);
-        if (amountOfEvaluations <= 0) {
+    public BlindAlgorithm(BlindAlgorithmParams params) {
+        super(params);
+        if (params.getNumberOfEvaluations() <= 0) {
             throw new IllegalArgumentException("Negative amount of evaluations");
         }
-        this.amountOfEvaluations = amountOfEvaluations;
+        this.amountOfEvaluations = params.getNumberOfEvaluations();
     }
 
     /**

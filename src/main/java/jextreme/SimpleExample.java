@@ -1,11 +1,12 @@
 package jextreme;
 
 import jextreme.algorithms.GeneticAlgorithm;
-import jextreme.algorithms.OptimizationAlgorithm;
+import jextreme.algorithms.params.GeneticAlgorithmParams;
 import jextreme.evolution.genetics.Genes;
 import jextreme.evolution.genetics.Range;
 import jextreme.evolution.genetics.crossover.ArithmeticCrossover;
 import jextreme.evolution.genetics.crossover.UniformCrossover;
+import jextreme.evolution.solution.FitnessFunction;
 import jextreme.evolution.solution.Specimen;
 import jextreme.listener.ConsoleEvolutionListener;
 
@@ -19,14 +20,6 @@ import java.util.Arrays;
  */
 class SimpleExample {
 
-    // parameters of genetic algorithm
-    private static final int POPULATION_SIZE = 100;
-    private static final double ELITISM_RATE = 0.05;
-    private static final double MUTATION_RATIO = 0.1;
-    private static final int NUMBER_OF_GENERATIONS = 1000;
-
-    private static final double AXIS_RANGES = 600;
-
     /**
      * Triggers the optimization and prints an output.
      *
@@ -34,25 +27,29 @@ class SimpleExample {
      */
     public static void main(String... args) {
 
-        // we need couple of other parameters like population size, number of generations,
-        // mutation ratio and elitism ratio to create genetic algorithm instance
-        final OptimizationAlgorithm algorithm =
-                new GeneticAlgorithm(
-                        genes -> {
-                            double d1 = genes.getGenes()[0];
-                            double d2 = genes.getGenes()[1];
-                            return -((d1 * d1) + (d1 * d1 + d2 * d2));
-                        },
-                        new Specimen(new Range[] {new Range(-AXIS_RANGES, AXIS_RANGES), new Range(-AXIS_RANGES, AXIS_RANGES)}),
-                        Arrays.asList(new ArithmeticCrossover(), new UniformCrossover(0.2)),
-                        new ConsoleEvolutionListener(),
-                        POPULATION_SIZE,
-                        NUMBER_OF_GENERATIONS,
-                        MUTATION_RATIO,
-                        ELITISM_RATE);
+        FitnessFunction fitnessFunction = xAndY -> {
+            double x = xAndY.getDimension(0);
+            double y = xAndY.getDimension(1);
+            return -((x * x) + (x * x + y * y));
+        };
+
+        Specimen specimen = new Specimen(new Range[] {
+                new Range(-600, 600),
+                new Range(-600, 600)
+        });
+
+        GeneticAlgorithmParams params = new GeneticAlgorithmParams();
+        params.setFitnessFunction(fitnessFunction);
+        params.setSpecimen(specimen);
+        params.setPopulationSize(100);
+        params.setNumberOfGenerations(1000);
+        params.setMutationProbability(0.1);
+        params.setElitismRatio(0.05);
+        params.setEvolutionListener(new ConsoleEvolutionListener());
+        params.setCrossovers(Arrays.asList(new ArithmeticCrossover(), new UniformCrossover(0.2)));
 
         // in this moment the genetic algorithm will do its work
-        Genes optimumSolution = algorithm.getOptimumSolution();
+        Genes optimumSolution = new GeneticAlgorithm(params).getOptimumSolution();
 
         // and the best solution should be somewhere around zero
         System.out.println("BEST FOUND SOLUTION: " + Arrays.toString(optimumSolution.getGenes()));

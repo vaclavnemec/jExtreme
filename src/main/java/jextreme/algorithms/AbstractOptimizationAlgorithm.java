@@ -1,8 +1,8 @@
 package jextreme.algorithms;
 
+import jextreme.algorithms.params.OptimizationAlgorithmParams;
 import jextreme.evolution.genetics.Genes;
 import jextreme.evolution.genetics.Range;
-import jextreme.evolution.solution.FitnessFunction;
 import jextreme.evolution.solution.Solution;
 import jextreme.evolution.solution.SolutionHolder;
 import jextreme.evolution.solution.Specimen;
@@ -12,11 +12,7 @@ import jextreme.random.RandomAdapterFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  *
@@ -26,12 +22,13 @@ abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
 
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
 
+    private final OptimizationAlgorithmParams params;
+
     /**
-     * @param fitnessFunction the definition of fitness function which is going to be optimised
+     * @param params the parameters for the optimization
      */
-    AbstractOptimizationAlgorithm(FitnessFunction fitnessFunction, final Specimen specimen) {
-        this.fitnessFunction = fitnessFunction;
-        this.specimen = specimen;
+    AbstractOptimizationAlgorithm(OptimizationAlgorithmParams params) {
+        this.params = params;
     }
 
     /**
@@ -39,15 +36,11 @@ abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
      */
     final RandomAdapter random = RandomAdapterFactory.getInstance();
 
-    private final FitnessFunction fitnessFunction;
-
-    private final Specimen specimen;
-
     /**
      * @return the specimen used in the optimization
      */
     Specimen getSpecimen() {
-        return this.specimen;
+        return this.params.getSpecimen();
     }
 
     /**
@@ -63,7 +56,7 @@ abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
     }
 
     private Solution getSolution(Genes genes) {
-        return () -> fitnessFunction.apply(genes);
+        return () -> params.getFitnessFunction().apply(genes);
     }
 
     /**
