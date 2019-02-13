@@ -2,6 +2,7 @@ package jextreme.algorithms;
 
 import jextreme.evolution.genetics.Genes;
 import jextreme.evolution.genetics.Mutation;
+import jextreme.evolution.genetics.Range;
 import jextreme.evolution.genetics.UniformMutation;
 import jextreme.evolution.genetics.crossover.GeneticCrossover;
 import jextreme.evolution.selector.EvolutionSelector;

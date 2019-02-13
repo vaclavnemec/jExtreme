@@ -25,11 +25,9 @@ import java.util.concurrent.Future;
 abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
 
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
-    private long fitnessInvocationCount = 0;
 
     /**
-     *
-     * @param fitnessFunction
+     * @param fitnessFunction the definition of fitness function which is going to be optimised
      */
     AbstractOptimizationAlgorithm(FitnessFunction fitnessFunction, final Specimen specimen) {
         this.fitnessFunction = fitnessFunction;
@@ -46,17 +44,15 @@ abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
     private final Specimen specimen;
 
     /**
-     *
-     * @return
+     * @return the specimen used in the optimization
      */
     Specimen getSpecimen() {
         return this.specimen;
     }
 
     /**
-     *
-     * @param genes
-     * @return
+     * @param genes the genes to be used
+     * @return solution holder with the solution
      */
     SolutionHolder createSolution(final Genes genes) {
         final Solution solution = getSolution(genes);
@@ -71,11 +67,10 @@ abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
     }
 
     /**
-     *
-     * @param amount
-     * @return
+     * @param amount the size of the population
+     * @return a random population of solutions
      */
-    List<SolutionHolder> createRandomPopulation(final Integer amount) {
+    List<SolutionHolder> createRandomPopulation(final int amount) {
         final List<SolutionHolder> population = new ArrayList<>();
         while (population.size() < amount) {
             population.add(this.createRandomSolution());
@@ -84,8 +79,7 @@ abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
     }
 
     /**
-     *
-     * @return
+     * @return random solution
      */
     SolutionHolder createRandomSolution() {
         final SolutionHolder holder = new SolutionHolder();
@@ -135,7 +129,6 @@ abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
         final Iterator<SolutionHolder> holderIterator = holders.iterator();
         for (final Future<Double> solutionFuture : solutionFutures) {
             try {
-                this.fitnessInvocationCount++;
                 holderIterator.next().setFitness(solutionFuture.get());
             } catch (InterruptedException | ExecutionException e) {
                 throw new IllegalStateException("Not able to simulate solution", e);

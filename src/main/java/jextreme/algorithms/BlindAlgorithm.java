@@ -14,8 +14,8 @@ public class BlindAlgorithm extends AbstractOptimizationAlgorithm {
     private final long amountOfEvaluations;
 
     /**
-     *
-     * @param fitnessFunction
+     * @param fitnessFunction the function to be optimised
+     * @param specimen the specimen for the solution
      * @param amountOfEvaluations
      */
     public BlindAlgorithm(final FitnessFunction fitnessFunction, final Specimen specimen, final long amountOfEvaluations) {

@@ -62,17 +62,6 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
         this.amountOfMigrations = amountOfMigrations;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.vtraderplatform.evolution.EvolutionAlgorithm#evolution()
-     */
-
-    /**
-     *
-     * @return
-     */
-    
     @Override
     public Genes getOptimumSolution() {
         List<SolutionHolder> population = this.createRandomPopulation(this.populationSize);

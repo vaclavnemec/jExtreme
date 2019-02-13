@@ -35,7 +35,7 @@ class SimpleExample {
     public static void main(String... args) {
 
         // we need couple of other parameters like population size, number of generations,
-        // mutation ratio and elitsm ratio to create genetic algorithm instance
+        // mutation ratio and elitism ratio to create genetic algorithm instance
         final OptimizationAlgorithm algorithm =
                 new GeneticAlgorithm(
                         genes -> {

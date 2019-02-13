@@ -28,10 +28,9 @@ public abstract class AbstractEvolutionSelector implements EvolutionSelector {
 	}
 
     /**
-     *
-     * @param solutions
-     * @param amountOfParents
-     * @return
+     * @param solutions the parents will be selected from these solutions
+     * @param amountOfParents the about of parents we want to get
+     * @return list of the selected parents
      */
     @Override
 	public List<SolutionHolder> selectParents(final List<SolutionHolder> solutions, final int amountOfParents) {
