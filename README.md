@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/vaclavnemec/jExtreme.svg?branch=master)](https://travis-ci.org/vaclavnemec/jExtreme)
+
 jExtreme
 =========
 
