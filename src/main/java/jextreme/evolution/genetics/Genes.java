@@ -9,7 +9,7 @@ package jextreme.evolution.genetics;
  */
 public class Genes {
 
-	final double[] genes;
+	private final double[] genes;
 
     /**
      *
