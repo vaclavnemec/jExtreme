@@ -24,11 +24,4 @@ public class RouletteEvolutionSelector extends AbstractEvolutionSelector {
 		this.normalize(0, 1, solutions);
 	}
 
-	/**
-	 * @param random
-	 *            the random to set
-	 */
-	public void setRandom(final RandomAdapter random) {
-		this.random = random;
-	}
 }

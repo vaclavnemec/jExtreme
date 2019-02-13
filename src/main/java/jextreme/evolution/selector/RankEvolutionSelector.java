@@ -36,7 +36,7 @@ public class RankEvolutionSelector extends AbstractEvolutionSelector {
      */
     protected int getArithmetricSum(final int from, final int to) {
 		if (to < from) {
-			throw new IllegalArgumentException("Parameter 'to' is smaller than 'from'");
+			throw new IllegalArgumentException("The parameter 'from' is bigger than the paramater 'to'.");
 		}
 		int sum = 0;
 		for (int i = from; i <= to; i++) {

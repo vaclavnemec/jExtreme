@@ -29,7 +29,7 @@ public abstract class AbstractEvolutionSelector implements EvolutionSelector {
      */
     @Override
 	public void initSolutions(final List<SolutionHolder> solutions) {
-		Collections.sort(solutions, new DescendingFitnessComparator());
+		solutions.sort(new DescendingFitnessComparator());
 	}
 
     /**
