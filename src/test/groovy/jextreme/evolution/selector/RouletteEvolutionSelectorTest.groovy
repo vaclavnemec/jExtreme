@@ -30,7 +30,7 @@ class RouletteEvolutionSelectorTest extends Specification {
     }
 
     /**
-     * Central limit theorem test for lot of selections
+     * Central limit theorem test for many selections
      */
     def "test repeated #times times"() {
 
@@ -59,7 +59,7 @@ class RouletteEvolutionSelectorTest extends Specification {
             final int index = parents.get(0).getId()
             frequencies[index] = frequencies[index] + 1
         }
-        final double delta = 500.0
+        final double delta = 1000.0
 
         then:
         Assert.assertEquals(frequencies[0], 66666, delta)
