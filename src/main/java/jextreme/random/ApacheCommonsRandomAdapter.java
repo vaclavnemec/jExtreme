@@ -1,8 +1,5 @@
 package jextreme.random;
 
-import java.math.BigDecimal;
-
-import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.random.MersenneTwister;
 import org.apache.commons.math3.random.RandomAdaptor;
 import org.apache.commons.math3.random.RandomGenerator;

@@ -29,15 +29,6 @@ public class EmptyEvolutionListener implements EvolutionListener {
 
     /**
      *
-     * @param selectedParents
-     */
-    @Override
-    public void reportParents(List<SolutionHolder> selectedParents) {
-        // System.out.println(String.join("Parents: ", selectedParents.toString()));
-    }
-
-    /**
-     *
      * @param best
      */
     @Override

@@ -173,7 +173,4 @@ public class SolutionHolder {
         }
         return Objects.equals(this.genes, other.genes);
     }
-
-    
-
 }

@@ -24,12 +24,6 @@ public interface EvolutionListener {
 
     /**
      *
-     * @param selectedParents
-     */
-    void reportParents(List<SolutionHolder> selectedParents);
-
-    /**
-     *
      * @param best
      */
     void reportBestSolution(SolutionHolder best);
