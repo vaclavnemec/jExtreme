@@ -106,9 +106,6 @@ class ExampleRunner {
         exampleRunner.runAllAlgorithmsAndCompare(griewangk, 0.0);
     }
 
-    /**
-     * @param globalSolution
-     */
     private void runAllAlgorithmsAndCompare(FitnessFunction fitnessFunction, double globalSolution) {
         Genes best = null;
         OptimizationAlgorithm bestA = null;

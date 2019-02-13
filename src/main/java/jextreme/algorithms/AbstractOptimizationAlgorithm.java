@@ -103,10 +103,6 @@ abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
         this.threadPool.shutdown();
     }
 
-    /**
-     *
-     * @param holders
-     */
     void retrieveFitness(final List<SolutionHolder> holders) {
         final List<Future<Double>> solutionFutures = new ArrayList<>();
         // loop over population and create time simulators to simulate it

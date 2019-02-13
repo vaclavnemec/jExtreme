@@ -21,115 +21,59 @@ public class SolutionHolder {
 
     private Genes genes;
 
-    /**
-     *
-     * @return
-     */
     public Double getScaledFitness() {
         return scaledFitness;
     }
 
-    /**
-     *
-     * @param scaledFitness
-     */
     public void setScaledFitness(Double scaledFitness) {
         this.scaledFitness = scaledFitness;
     }
 
-    /**
-     *
-     * @return
-     */
     public Double getProbabilityToBeParent() {
         return probabilityToBeParent;
     }
 
-    /**
-     *
-     * @param probabilityToBeParent
-     */
     public void setProbabilityToBeParent(Double probabilityToBeParent) {
         this.probabilityToBeParent = probabilityToBeParent;
     }
 
-    /**
-     *
-     * @return
-     */
     public Solution getSolution() {
         return solution;
     }
 
-    /**
-     *
-     * @param solution
-     */
     public void setSolution(Solution solution) {
         this.solution = solution;
     }
 
-    /**
-     *
-     * @return
-     */
     public Double getFitness() {
         return fitness;
     }
 
-    /**
-     *
-     * @param fitness
-     */
     public void setFitness(Double fitness) {
         this.fitness = fitness;
     }
 
-    /**
-     *
-     * @return
-     */
     public Integer getId() {
         return id;
     }
 
-    /**
-     *
-     * @param id
-     */
     public void setId(Integer id) {
         this.id = id;
     }
 
-    /**
-     *
-     * @return
-     */
     public Genes getGenes() {
         return genes;
     }
 
-    /**
-     *
-     * @param genes
-     */
     public void setGenes(Genes genes) {
         this.genes = genes;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public String toString() {
         return "SolutionHolder{" + "scaledFitness=" + scaledFitness + ", probabilityToBeParent=" + probabilityToBeParent + ", solution=" + solution + ", fitness=" + fitness + ", id=" + id + ", genotype=" + genes + '}';
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public int hashCode() {
         int hash = 3;
@@ -142,11 +86,6 @@ public class SolutionHolder {
         return hash;
     }
 
-    /**
-     *
-     * @param obj
-     * @return
-     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

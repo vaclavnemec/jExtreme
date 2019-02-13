@@ -3,7 +3,6 @@ package jextreme.evolution.genetics;
 import java.util.Objects;
 
 /**
- *
  * @author Vaclav
  */
 public class Range {
@@ -12,35 +11,22 @@ public class Range {
     private final double maxValue;
 
     /**
-     *
-     * @param minValue
-     * @param maxValue
+     * @param minValue the lower limit
+     * @param maxValue the upper limit
      */
     public Range(double minValue, double maxValue) {
         this.minValue = minValue;
         this.maxValue = maxValue;
     }
 
-    /**
-     *
-     * @return
-     */
     public double getMinValue() {
         return minValue;
     }
 
-    /**
-     *
-     * @return
-     */
     public double getMaxValue() {
         return maxValue;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public String toString() {
         return "GeneDefinition{" + "minValue=" + minValue + ", maxValue=" + maxValue + '}';

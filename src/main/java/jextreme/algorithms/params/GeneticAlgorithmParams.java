@@ -8,32 +8,32 @@ import java.util.List;
 public class GeneticAlgorithmParams extends OptimizationAlgorithmParams {
 
     /**
-     * @return the list of crossovers to be used in the optimization. Each time selected randomly, if more than 1
+     * the list of crossovers to be used in the optimization. Each time selected randomly, if more than 1
      */
     private List<GeneticCrossover> crossovers;
 
     /**
-     * @return simple listener to track progress of the optimization process
+     * simple listener to track progress of the optimization process
      */
     private EvolutionListener evolutionListener;
 
     /**
-     * @return the size of the population for the genetic algorithm
+     * the size of the population for the genetic algorithm
      */
     private int populationSize;
 
     /**
-     * @return the number of generations to be simulated
+     * the number of generations to be simulated
      */
     private long numberOfGenerations;
 
     /**
-     * @return the probability for a mutation of the solution
+     * the probability for a mutation of the solution
      */
     private double mutationProbability;
 
     /**
-     * @return the ratio of elite solutions which is copied into new generation
+     * the ratio of elite solutions which is copied into new generation
      */
     private double elitismRatio;
 

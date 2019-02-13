@@ -6,23 +6,20 @@ package jextreme.random;
 public interface RandomAdapter {
 
     /**
-     *
-     * @return
+     * @return 0 to 1
      */
     double nextDouble();
 
     /**
-     *
-     * @param n
-     * @return
+     * @param n exclusive limit
+     * @return random int from 0 to n
      */
     int nextInt(int n);
 
     /**
-     *
-     * @param minValue
-     * @param maxValue
-     * @return
+     * @param minValue the lower limit
+     * @param maxValue thu upper limit
+     * @return random number from the interval
      */
     double nextDouble(double minValue, double maxValue);
 

@@ -20,19 +20,11 @@ public class BlindAlgorithm extends AbstractOptimizationAlgorithm {
         this.amountOfEvaluations = params.getNumberOfEvaluations();
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public String toString() {
         return "BLIND";
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public Genes getOptimumSolution() {
         SolutionHolder best = null;

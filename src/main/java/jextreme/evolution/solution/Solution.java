@@ -6,8 +6,7 @@ package jextreme.evolution.solution;
 public interface Solution {
 
     /**
-     *
-     * @return
+     * @return the fitness value of the function
      */
     Double getFitness();
 }

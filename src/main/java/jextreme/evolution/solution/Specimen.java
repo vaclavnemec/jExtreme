@@ -11,24 +11,18 @@ public class Specimen {
 
     private final Range[] ranges;
 
-    /**
-     * @return
-     */
     @Override
     public String toString() {
         return Arrays.toString(this.ranges);
     }
 
     /**
-     * @param ranges
+     * @param ranges the limits for the optimised function
      */
     public Specimen(final Range[] ranges) {
         this.ranges = ranges;
     }
 
-    /**
-     * @return the genesRanges
-     */
     public Range[] getRanges() {
         return this.ranges;
     }

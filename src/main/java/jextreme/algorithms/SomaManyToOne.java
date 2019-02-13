@@ -128,10 +128,6 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
         return possibleSolutions;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public String toString() {
         return "SOMA";

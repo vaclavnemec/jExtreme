@@ -9,10 +9,6 @@ import jextreme.evolution.solution.SolutionHolder;
  */
 public class RouletteEvolutionSelector extends AbstractEvolutionSelector {
 
-    /**
-     *
-     * @param solutions
-     */
     @Override
 	public void initSolutions(final List<SolutionHolder> solutions) {
 		super.initSolutions(solutions);
@@ -21,9 +17,9 @@ public class RouletteEvolutionSelector extends AbstractEvolutionSelector {
 	}
 
 	/**
-	 * @param solutions
+	 * @param solutions the solutions to be normalized before the selection
 	 */
-	protected void normalize(final List<SolutionHolder> solutions) {
+	 void normalize(final List<SolutionHolder> solutions) {
 
 		if (solutions.size() == 1) {
 			solutions.get(0).setProbabilityToBeParent(1.0);

@@ -6,12 +6,12 @@ import jextreme.evolution.solution.Specimen;
 public class OptimizationAlgorithmParams {
 
     /**
-     * @return this is the function we optimise. We look for the best solution for this function
+     * this is the function we optimise. We look for the best solution for this function
      */
     private FitnessFunction fitnessFunction;
 
     /**
-     * @return specimen limits the space of the fitness function. It provides limits for all dimensions
+     * specimen limits the space of the fitness function. It provides limits for all dimensions
      */
     private Specimen specimen;
 

@@ -45,10 +45,6 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
      */
     private final AtomicInteger evolutionStep = new AtomicInteger(0);
 
-    /**
-     *
-     * @return
-     */
     @Override
     public Genes getOptimumSolution() {
         // generates null population pseudo-randomly
@@ -97,13 +93,6 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
         return solutions.stream().limit(amountOfEliteSolutions).collect(Collectors.toList());
     }
 
-    /**
-     *
-     * @param mutationProbability
-     * @param solutions
-     * @param populationAmount
-     * @return
-     */
     private List<SolutionHolder> createNewGeneration(final double mutationProbability, final List<SolutionHolder> solutions, final Integer populationAmount) {
         final List<SolutionHolder> newSolutions = new ArrayList<>();
 
@@ -157,10 +146,6 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
         return this.evolutionStep.get() >= this.params.getNumberOfGenerations();
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public String toString() {
         return "GA";

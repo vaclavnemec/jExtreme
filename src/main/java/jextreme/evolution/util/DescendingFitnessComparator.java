@@ -10,12 +10,6 @@ import java.util.Comparator;
  */
 public class DescendingFitnessComparator implements Comparator<SolutionHolder> {
 
-    /**
-     *
-     * @param s1
-     * @param s2
-     * @return
-     */
     @Override
 	public int compare(final SolutionHolder s1, final SolutionHolder s2) {
 		return s2.getFitness().compareTo(s1.getFitness());

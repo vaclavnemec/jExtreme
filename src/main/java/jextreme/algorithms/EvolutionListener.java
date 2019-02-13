@@ -11,20 +11,17 @@ import java.util.List;
 public interface EvolutionListener {
 
     /**
-     *
-     * @param currentSolutions
+     * @param currentSolutions the list of current solutions in the generation
      */
     void reportGeneration(List<SolutionHolder> currentSolutions);
 
     /**
-     *
-     * @param evolutionStep
+     * @param evolutionStep the number of the evolution step
      */
     void reportNewStep(int evolutionStep);
 
     /**
-     *
-     * @param best
+     * @param best this is the callback with the best solution found
      */
     void reportBestSolution(SolutionHolder best);
 
