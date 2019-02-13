@@ -2,6 +2,7 @@ package jextreme.listener;
 
 import jextreme.algorithms.EvolutionListener;
 import jextreme.evolution.solution.SolutionHolder;
+
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public class ConsoleEvolutionListener implements EvolutionListener {
      */
     @Override
     public void reportGeneration(List<SolutionHolder> currentSolutions) {
-        // empty
+        System.out.println(String.join("Generation: ", String.valueOf(currentSolutions)));
     }
 
     /**

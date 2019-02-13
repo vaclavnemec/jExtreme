@@ -8,29 +8,30 @@ import spock.lang.Unroll
 @Unroll
 class RankEvolutionSelectorTest extends Specification {
 
-    def "get arithmetic sum for #par1 and #par2 is #result"() {
+    def "get arithmetic sum for #limit is #result"() {
         when:
-        def sum = new RankEvolutionSelector().getArithmetricSum(par1, par2)
+        def sum = new RankEvolutionSelector().getArithmeticSum(limit)
         then:
         sum == result
         where:
-        par1 | par2 || result
-        1    | 2    || 3
-        0    | 2    || 3
-        -1   | 1    || 0
-        0    | 0    || 0
-        5    | 5    || 5
-        -5   | 5    || 0
-        3    | 5    || 12
-        -5   | 2    || -12
+        limit || result
+        1     || 1
+        2     || 3
+        3     || 6
+        4     || 10
+        5     || 15
+        6     || 21
+        7     || 28
+        8     || 36
+        12345 || 76205685
     }
 
     def "the illegal argument exception is thrown"() {
         when:
-        new RankEvolutionSelector().getArithmetricSum(5, 2)
+        new RankEvolutionSelector().getArithmeticSum(-19)
         then:
         def e = thrown(IllegalArgumentException)
-        e.message == "The parameter 'from' is bigger than the paramater 'to'."
+        e.message == "The parameter 'limit' should be at least 1."
     }
 
 
@@ -51,11 +52,11 @@ class RankEvolutionSelectorTest extends Specification {
         s3.setFitness(-30.0)
         s3.setId(2)
 
-        def solutions = [s1,s2,s3]
+        def solutions = [s1, s2, s3]
 
         when:
 
-        final int[] frequencies = new int[3];
+        final int[] frequencies = new int[3]
         for (int i = 1; i < 100000; i++) {
             def selector = new RankEvolutionSelector()
             selector.initSolutions(solutions)

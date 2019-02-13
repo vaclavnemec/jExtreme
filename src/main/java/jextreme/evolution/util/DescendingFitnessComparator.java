@@ -1,6 +1,3 @@
-/**
- * Sep 13, 2013
- */
 package jextreme.evolution.util;
 
 import jextreme.evolution.solution.SolutionHolder;

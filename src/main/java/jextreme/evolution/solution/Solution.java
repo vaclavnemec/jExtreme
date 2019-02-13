@@ -1,6 +1,3 @@
-/**
- * Aug 26, 2013
- */
 package jextreme.evolution.solution;
 
 /**

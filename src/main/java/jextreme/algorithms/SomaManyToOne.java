@@ -1,6 +1,3 @@
-/**
- * 28. 12. 2013
- */
 package jextreme.algorithms;
 
 import jextreme.evolution.genetics.Genes;
@@ -12,7 +9,6 @@ import jextreme.evolution.util.DescendingFitnessComparator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -85,7 +81,7 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
         for (int i = 0; i < this.amountOfMigrations; i++) {
             super.retrieveFitness(population);
 
-            Collections.sort(population, new DescendingFitnessComparator());
+            population.sort(new DescendingFitnessComparator());
 
             final Iterator<SolutionHolder> iterator = population.iterator();
             leader = iterator.next();
@@ -106,11 +102,9 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
         for (final SolutionHolder solution : population) {
             final List<SolutionHolder> possibleSolutions = this.migrate(leader, solution);
             super.retrieveFitness(possibleSolutions);
-            Collections.sort(possibleSolutions, new DescendingFitnessComparator());
+            possibleSolutions.sort(new DescendingFitnessComparator());
             Optional<SolutionHolder> first = possibleSolutions.stream().findFirst();
-            if (first.isPresent()) {
-                newPopulation.add(first.get());
-            }
+            first.ifPresent(newPopulation::add);
         }
 
         return newPopulation;
@@ -137,7 +131,7 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
 
         final Specimen specimen = this.getSpecimen();
 
-        final Double targetDistance = getDistance(leader, solution) * this.pathLength;
+        final double targetDistance = getDistance(leader, solution) * this.pathLength;
         
         double distance = 0.0;
         while ((distance += this.step) < targetDistance) {

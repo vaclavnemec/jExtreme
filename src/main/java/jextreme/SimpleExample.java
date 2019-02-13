@@ -17,7 +17,7 @@ import java.util.Arrays;
  *
  * @author vaclavnemec
  */
-public class SimpleExample {
+class SimpleExample {
 
     // parameters of genetic algorithm
     private static final int POPULATION_SIZE = 100;
@@ -32,7 +32,7 @@ public class SimpleExample {
      *
      * @param args not used
      */
-    public static final void main(String... args) {
+    public static void main(String... args) {
 
         // we need couple of other parameters like population size, number of generations,
         // mutation ratio and elitsm ratio to create genetic algorithm instance

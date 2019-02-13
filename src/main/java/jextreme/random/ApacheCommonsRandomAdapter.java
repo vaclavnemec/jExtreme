@@ -27,17 +27,6 @@ public class ApacheCommonsRandomAdapter implements RandomAdapter {
 
     /**
      *
-     * @param sigma
-     * @return
-     */
-    @Override
-	public double nextGaussian(final BigDecimal sigma) {
-		final NormalDistribution dist = new NormalDistribution(this.generator, 0, sigma.doubleValue(), 1e-9);
-		return dist.sample();
-	}
-
-    /**
-     *
      * @param n
      * @return
      */
@@ -59,15 +48,6 @@ public class ApacheCommonsRandomAdapter implements RandomAdapter {
 		} else {
 			return minValue + (maxValue - minValue) * (this.adaptor.nextDouble());
 		}
-	}
-
-    /**
-     *
-     * @return
-     */
-    @Override
-	public double nextGaussian() {
-		return this.adaptor.nextGaussian();
 	}
 
 }

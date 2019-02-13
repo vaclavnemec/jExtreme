@@ -42,7 +42,7 @@ public class UniformMutation implements Mutation {
      * @param range
      * @return
      */
-    protected double mutateGene(final Range range) {
+    private double mutateGene(final Range range) {
         final double mutatedGene = this.random.nextDouble(range.getMinValue(), range.getMaxValue());
         if (range.getMinValue() > mutatedGene || range.getMaxValue() < mutatedGene) {
             throw new IllegalStateException();

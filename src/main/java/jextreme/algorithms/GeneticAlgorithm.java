@@ -12,7 +12,6 @@ import jextreme.evolution.solution.Specimen;
 import jextreme.evolution.util.DescendingFitnessComparator;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
 
     /**
      *
-     * @param fitnesFunction
+     * @param fitnessFunction
      * @param crossovers
      * @param evolutionListener
      * @param populationSize
@@ -47,9 +46,9 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
      * @param mutationRate
      * @param elitismRate
      */
-    public GeneticAlgorithm(final FitnessFunction fitnesFunction, final Specimen specimen, final List<GeneticCrossover> crossovers, EvolutionListener evolutionListener, final int populationSize,
+    public GeneticAlgorithm(final FitnessFunction fitnessFunction, final Specimen specimen, final List<GeneticCrossover> crossovers, EvolutionListener evolutionListener, final int populationSize,
                             final long steps, final double mutationRate, final double elitismRate) {
-        super(fitnesFunction, specimen);
+        super(fitnessFunction, specimen);
         this.crossovers = crossovers;
         this.populationSize = populationSize;
         this.maximumNumberOfSteps = steps;
@@ -59,10 +58,6 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
     }
 
     // STATE OF EVOLUTION
-    /**
-     * Collection with current population
-     */
-    private List<SolutionHolder> solutions;
 
     /**
      * Evolution step counter. 0 is first.
@@ -76,20 +71,20 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
     @Override
     public Genes getOptimumSolution() {
         // generates null population pseudo-randomly
-        this.solutions = this.createRandomPopulation(this.populationSize);
+        List<SolutionHolder> solutions = this.createRandomPopulation(this.populationSize);
 
         for (;;) {
             // report step
             this.evolutionListener.reportNewStep(++this.evolutionStep);
 
             // simulate solutions
-            this.retrieveFitness(this.solutions);
+            this.retrieveFitness(solutions);
 
             // sort for report
-            Collections.sort(this.solutions, new DescendingFitnessComparator());
+            solutions.sort(new DescendingFitnessComparator());
 
             // report current solutions
-            this.evolutionListener.reportGeneration(this.solutions);
+            this.evolutionListener.reportGeneration(solutions);
 
             // end
             if (this.isComplete()) {
@@ -97,21 +92,21 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
             }
             
             // select elite member as a parent
-            final List<SolutionHolder> eliteMembers = this.getEliteMembers(this.solutions, this.elitismRate);
+            final List<SolutionHolder> eliteMembers = this.getEliteMembers(solutions, this.elitismRate);
 
             // new generation
-            this.solutions = this.createNewGeneration(this.mutationRate, this.solutions, this.populationSize - eliteMembers.size());
+            solutions = this.createNewGeneration(this.mutationRate, solutions, this.populationSize - eliteMembers.size());
 
-            this.solutions.addAll(eliteMembers);
+            solutions.addAll(eliteMembers);
 
         }
 
-        Collections.sort(this.solutions, new DescendingFitnessComparator());
-        this.evolutionListener.reportBestSolution(this.solutions.iterator().next());
+        solutions.sort(new DescendingFitnessComparator());
+        this.evolutionListener.reportBestSolution(solutions.iterator().next());
 
         this.release();
 
-        return this.solutions.iterator().next().getGenes();
+        return solutions.iterator().next().getGenes();
     }
 
     private List<SolutionHolder> getEliteMembers(final List<SolutionHolder> solutions, final double elitismRate) {
@@ -134,7 +129,7 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
      * @param populationAmount
      * @return
      */
-    public List<SolutionHolder> createNewGeneration(final double mutationRate, final List<SolutionHolder> solutions, final Integer populationAmount) {
+    private List<SolutionHolder> createNewGeneration(final double mutationRate, final List<SolutionHolder> solutions, final Integer populationAmount) {
         final List<SolutionHolder> newSolutions = new ArrayList<>();
 
         this.selector.initSolutions(solutions);
@@ -172,7 +167,7 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
 
         while (solutionHolder.size() < 2) {
             final List<SolutionHolder> selectParents = this.selector.selectParents(solutions, 2);
-            Collections.sort(selectParents, new DescendingFitnessComparator());
+            selectParents.sort(new DescendingFitnessComparator());
             solutionHolder.add(selectParents.iterator().next());
         }
 

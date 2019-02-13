@@ -6,7 +6,7 @@ import spock.lang.Unroll
 
 @Unroll
 class ArithmeticCrossoverTest extends Specification {
-    def "arritmetic crossover or #inputs1 and #inputs2 is #results"() {
+    def "arithmetic crossover or #inputs1 and #inputs2 is #results"() {
         given:
         def c = new ArithmeticCrossover()
         def g1 = new Genes(inputs1 as double[])

@@ -22,10 +22,7 @@ import java.util.List;
  *
  * @author Vaclav
  */
-public class ExampleRunner {
-
-    private static int POPULATION = 10;
-    private static int GENERATIONS = 10;
+class ExampleRunner {
 
     public static void main(String[] args) {
         // DeJong
@@ -79,7 +76,7 @@ public class ExampleRunner {
         FitnessFunction griewangk = dimensions -> {
             double[] inputs = dimensions.getGenes();
 
-            double result = 0;
+            double result;
 
             double sumPart = 0;
             for (double i : inputs) {
@@ -133,6 +130,8 @@ public class ExampleRunner {
         // specimen limits the algorithms range
         Specimen specimen = new Specimen(new Range[] {new Range(-600.0, 600.0), new Range(-600.0, 600.0)});
 
+        int POPULATION = 10;
+        int GENERATIONS = 10;
         algorithms.add(new GeneticAlgorithm(fitnessFunction, specimen, crossovers, new EmptyEvolutionListener(), POPULATION, GENERATIONS * 250, 0.1, 0.05));
         algorithms.add(new SomaManyToOne(400, .99, .1, POPULATION, GENERATIONS, fitnessFunction, specimen));
         algorithms.add(new BlindAlgorithm(fitnessFunction, specimen, 40000));

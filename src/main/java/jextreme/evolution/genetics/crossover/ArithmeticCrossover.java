@@ -1,6 +1,3 @@
-/**
- * Aug 22, 2013
- */
 package jextreme.evolution.genetics.crossover;
 
 import jextreme.evolution.genetics.Genes;

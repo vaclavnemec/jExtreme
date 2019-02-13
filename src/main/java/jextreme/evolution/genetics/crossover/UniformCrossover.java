@@ -11,7 +11,7 @@ public class UniformCrossover implements GeneticCrossover {
 
 	private final double crossoverRatio;
 
-	protected RandomAdapter random = RandomAdapterFactory.getInstance();
+	private final RandomAdapter random = RandomAdapterFactory.getInstance();
 
 	/**
 	 * @param crossoverRatio you should provide a number from 0 to 1. The lower the number the bigger the chance

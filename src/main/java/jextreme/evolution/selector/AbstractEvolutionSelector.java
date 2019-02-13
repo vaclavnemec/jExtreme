@@ -1,10 +1,6 @@
-/**
- * Aug 9, 2013
- */
 package jextreme.evolution.selector;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,7 +17,7 @@ public abstract class AbstractEvolutionSelector implements EvolutionSelector {
     /**
      *
      */
-    protected RandomAdapter random = RandomAdapterFactory.getInstance();
+	private final RandomAdapter random = RandomAdapterFactory.getInstance();
 
     /**
      *
@@ -33,12 +29,9 @@ public abstract class AbstractEvolutionSelector implements EvolutionSelector {
 	}
 
     /**
-     *
-     * @param a
-     * @param b
      * @param solutions
      */
-    protected void normalize(final double a, final double b, final List<SolutionHolder> solutions) {
+    protected void normalize(final List<SolutionHolder> solutions) {
 		double min = Double.MAX_VALUE;
 		double max = Double.MIN_VALUE;
 		for (final SolutionHolder solution : solutions) {
@@ -48,7 +41,7 @@ public abstract class AbstractEvolutionSelector implements EvolutionSelector {
 		}
 		double sum = 0;
 		for (final SolutionHolder solution : solutions) {
-			final double scaled = this.scale(a, b, max, min, solution.getFitness());
+			final double scaled = this.scale(0, 1, max, min, solution.getFitness());
 			solution.setScaledFitness(scaled);
 			sum += Math.abs(scaled);
 		}
@@ -85,13 +78,13 @@ public abstract class AbstractEvolutionSelector implements EvolutionSelector {
 		final List<SolutionHolder> parents = new ArrayList<>();
 
 		while (parents.size() < amountOfParents) {
-			final double sufficintLevel = this.random.nextDouble();
+			final double sufficientLevel = this.random.nextDouble();
 
 			double sum = 0;
 			for (final Iterator<SolutionHolder> iterator = copy.iterator(); iterator.hasNext();) {
 				final SolutionHolder possibleParent = iterator.next();
 				sum += possibleParent.getProbabilityToBeParent();
-				if (sum > sufficintLevel) {
+				if (sum > sufficientLevel) {
 					parents.add(possibleParent);
 					iterator.remove();
 					break;

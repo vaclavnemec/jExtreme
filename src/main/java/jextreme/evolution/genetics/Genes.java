@@ -1,7 +1,6 @@
-/**
- * Aug 22, 2013
- */
 package jextreme.evolution.genetics;
+
+import java.util.Arrays;
 
 /**
  * @author Vaclav
@@ -28,7 +27,7 @@ public class Genes {
 	}
 
 	/**
-	 * Convinient method to get a value of the n-th dimension
+	 * Convenient method to get a value of the n-th dimension
 	 * @param n to identify the dimension
 	 * @return the value of the dimension
 	 */
@@ -42,6 +41,6 @@ public class Genes {
      */
     @Override
 	public String toString() {
-		return this.genes.toString();
+		return Arrays.toString(this.genes);
 	}
 }

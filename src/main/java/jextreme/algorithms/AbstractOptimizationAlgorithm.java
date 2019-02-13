@@ -22,7 +22,7 @@ import java.util.concurrent.Future;
  *
  * @author Vaclav
  */
-public abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
+abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
 
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
     private long fitnessInvocationCount = 0;
@@ -31,7 +31,7 @@ public abstract class AbstractOptimizationAlgorithm implements OptimizationAlgor
      *
      * @param fitnessFunction
      */
-    public AbstractOptimizationAlgorithm(FitnessFunction fitnessFunction, final Specimen specimen) {
+    AbstractOptimizationAlgorithm(FitnessFunction fitnessFunction, final Specimen specimen) {
         this.fitnessFunction = fitnessFunction;
         this.specimen = specimen;
     }
@@ -39,17 +39,17 @@ public abstract class AbstractOptimizationAlgorithm implements OptimizationAlgor
     /**
      *
      */
-    protected final RandomAdapter random = RandomAdapterFactory.getInstance();
+    final RandomAdapter random = RandomAdapterFactory.getInstance();
 
-    protected final FitnessFunction fitnessFunction;
+    private final FitnessFunction fitnessFunction;
 
-    protected final Specimen specimen;
+    private final Specimen specimen;
 
     /**
      *
      * @return
      */
-    public Specimen getSpecimen() {
+    Specimen getSpecimen() {
         return this.specimen;
     }
 
@@ -58,7 +58,7 @@ public abstract class AbstractOptimizationAlgorithm implements OptimizationAlgor
      * @param genes
      * @return
      */
-    public SolutionHolder createSolution(final Genes genes) {
+    SolutionHolder createSolution(final Genes genes) {
         final Solution solution = getSolution(genes);
         final SolutionHolder holder = new SolutionHolder();
         holder.setSolution(solution);
@@ -67,13 +67,7 @@ public abstract class AbstractOptimizationAlgorithm implements OptimizationAlgor
     }
 
     private Solution getSolution(Genes genes) {
-        final Double fitness = fitnessFunction.apply(genes);
-        return new Solution() {
-            @Override
-            public Double getFitness() {
-                return fitness;
-            }
-        };
+        return () -> fitnessFunction.apply(genes);
     }
 
     /**
@@ -81,7 +75,7 @@ public abstract class AbstractOptimizationAlgorithm implements OptimizationAlgor
      * @param amount
      * @return
      */
-    public List<SolutionHolder> createRandomPopulation(final Integer amount) {
+    List<SolutionHolder> createRandomPopulation(final Integer amount) {
         final List<SolutionHolder> population = new ArrayList<>();
         while (population.size() < amount) {
             population.add(this.createRandomSolution());
@@ -93,7 +87,7 @@ public abstract class AbstractOptimizationAlgorithm implements OptimizationAlgor
      *
      * @return
      */
-    public SolutionHolder createRandomSolution() {
+    SolutionHolder createRandomSolution() {
         final SolutionHolder holder = new SolutionHolder();
 
         final Genes randomGenes = this.randomGenotype(this.getSpecimen());
@@ -118,7 +112,7 @@ public abstract class AbstractOptimizationAlgorithm implements OptimizationAlgor
     /**
      *
      */
-    protected void release() {
+    void release() {
         this.threadPool.shutdown();
     }
 
@@ -126,7 +120,7 @@ public abstract class AbstractOptimizationAlgorithm implements OptimizationAlgor
      *
      * @param holders
      */
-    protected void retrieveFitness(final List<SolutionHolder> holders) {
+    void retrieveFitness(final List<SolutionHolder> holders) {
         final List<Future<Double>> solutionFutures = new ArrayList<>();
         // loop over population and create time simulators to simulate it
         for (final SolutionHolder holder : holders) {
@@ -159,7 +153,7 @@ class SolutionCallable implements Callable<Double> {
     }
 
     @Override
-    public Double call() throws Exception {
+    public Double call() {
         return this.holder.getSolution().getFitness();
     }
 }

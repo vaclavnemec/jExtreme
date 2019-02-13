@@ -2,6 +2,8 @@ package jextreme.evolution.solution;
 
 import jextreme.evolution.genetics.Range;
 
+import java.util.Arrays;
+
 /**
  * @author Vaclav
  */
@@ -14,7 +16,7 @@ public class Specimen {
      */
     @Override
     public String toString() {
-        return this.ranges.toString();
+        return Arrays.toString(this.ranges);
     }
 
     /**

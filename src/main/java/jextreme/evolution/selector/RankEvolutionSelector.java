@@ -1,6 +1,7 @@
 package jextreme.evolution.selector;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import jextreme.evolution.solution.SolutionHolder;
 
@@ -19,7 +20,7 @@ public class RankEvolutionSelector extends AbstractEvolutionSelector {
 
 		super.initSolutions(solutions);
 
-		final int size = this.getArithmetricSum(1, solutions.size());
+		final int size = this.getArithmeticSum(solutions.size());
 
 		int i = 1;
 
@@ -29,20 +30,14 @@ public class RankEvolutionSelector extends AbstractEvolutionSelector {
 	}
 
     /**
-     *
-     * @param from
-     * @param to
-     * @return
+     * @param limit the upper limit for the calculation
+     * @return the arithmetic sum from 1 to the provided limit parameter
      */
-    protected int getArithmetricSum(final int from, final int to) {
-		if (to < from) {
-			throw new IllegalArgumentException("The parameter 'from' is bigger than the paramater 'to'.");
+    protected int getArithmeticSum(final int limit) {
+		if (limit < 1) {
+			throw new IllegalArgumentException("The parameter 'limit' should be at least 1.");
 		}
-		int sum = 0;
-		for (int i = from; i <= to; i++) {
-			sum += i;
-		}
-		return sum;
+		return IntStream.rangeClosed(1, limit).sum();
 	}
 
 }
