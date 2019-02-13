@@ -12,8 +12,7 @@ public class RandomAdapterFactory {
 	private static final RandomAdapter adapter = new ApacheCommonsRandomAdapter();
 
     /**
-     *
-     * @return
+     * @return an instance of the random adapter
      */
     public static RandomAdapter getInstance() {
 		return adapter;

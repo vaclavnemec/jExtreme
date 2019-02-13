@@ -3,26 +3,26 @@
  */
 package jextreme.evolution.genetics.crossover;
 
-/**
- * @author Vaclav
- * 
- */
-public class ArithmeticCrossover extends AbstractGeneticCrossover {
+import jextreme.evolution.genetics.Genes;
 
-    /**
-     *
-     * @param g1
-     * @param g2
-     * @return
-     */
-    @Override
-	protected Double[] apply(final Double g1, final Double g2) {
-		return new Double[] { (g1 + g2) / 2 };
-	}
+import java.util.stream.IntStream;
+
+/**
+ * The arithmetic crossover simply compute an average from the two numbers provided.
+ *
+ * @author Vaclav
+ */
+public class ArithmeticCrossover implements GeneticCrossover {
 
 	@Override
-	protected int crossoverResultSize() {
-		return 1;
-	}
+	public Genes[] apply(Genes genes1, Genes genes2) {
 
+		double[] g1 = genes1.getGenes();
+		double[] g2 = genes2.getGenes();
+
+		Genes crossedOverGenes = new Genes(((IntStream.range(0, g1.length)
+				.mapToDouble(i -> (g1[i] + g2[i]) / 2)
+				.toArray())));
+		return new Genes[] {crossedOverGenes};
+	}
 }

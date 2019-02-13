@@ -9,7 +9,7 @@ package jextreme.evolution.genetics;
  */
 public class Genes {
 
-	final double[] genes;
+	private final double[] genes;
 
     /**
      *
@@ -25,6 +25,15 @@ public class Genes {
      */
     public double[] getGenes() {
 		return this.genes;
+	}
+
+	/**
+	 * Convinient method to get a value of the n-th dimension
+	 * @param n to identify the dimension
+	 * @return the value of the dimension
+	 */
+	public double getDimension(int n) {
+    	return this.genes[n];
 	}
 
     /**
