@@ -35,9 +35,9 @@ class RankEvolutionSelectorTest extends Specification {
 
 
     /**
-     * Central limit theorem test for lot of selections
+     * Central limit theorem test for lot of selections.
      */
-    def "test repeated #times times"() {
+    def "Parents are selected with a given frequency based on a rank. Repeated #times times"() {
         given:
         SolutionHolder s1 = new SolutionHolder()
         s1.setFitness(2000.0)
@@ -62,7 +62,7 @@ class RankEvolutionSelectorTest extends Specification {
             final int index = selector.selectParents(solutions, 1).get(0).getId()
             frequencies[index] = frequencies[index] + 1
         }
-        final double delta = 500.0
+        final double delta = 1000.0
         then:
         Assert.assertEquals(frequencies[0], 100000 / 2.0, delta)
         Assert.assertEquals(frequencies[1], 100000 / 3.0, delta)
