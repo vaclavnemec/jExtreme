@@ -30,36 +30,36 @@ public class ExampleRunner {
     public static void main(String[] args) {
         // DeJong
         FitnessFunction dejongFunction = dimensions -> {
-            double x = dimensions.getGenes()[0];
-            double y = dimensions.getGenes()[1];
+            double x = dimensions.getDimension(0);
+            double y = dimensions.getDimension(1);
             return -(x * x + y * y);
         };
 
         // Axis Parallel Hyper Ellipsoid
         FitnessFunction hyperEllipsoid = dimensions -> {
-            double x = dimensions.getGenes()[0];
-            double y = dimensions.getGenes()[1];
+            double x = dimensions.getDimension(0);
+            double y = dimensions.getDimension(1);
             return -((x * x) + (x * x + y * y));
         };
 
         // rotated hyper ellipsoid
         FitnessFunction rotatedHyperEllipsoid = dimensions -> {
-            double x = dimensions.getGenes()[0];
-            double y = dimensions.getGenes()[1];
+            double x = dimensions.getDimension(0);
+            double y = dimensions.getDimension(1);
             return -(x * x + 2 * y * y);
         };
 
         // rastigin
         FitnessFunction rastigin = dimensions -> {
-            double x = dimensions.getGenes()[0];
-            double y = dimensions.getGenes()[1];
+            double x = dimensions.getDimension(0);
+            double y = dimensions.getDimension(1);
             return -(10 * 2 + (x * x - 10 * Math.cos(2 * Math.PI * x)) + (y * y - 10 * Math.cos(2 * Math.PI + y)));
         };
 
         // Rosenbrock
         FitnessFunction rosenbrock = dimensions -> {
-            double y = dimensions.getGenes()[0];
-            double x = dimensions.getGenes()[1];
+            double y = dimensions.getDimension(0);
+            double x = dimensions.getDimension(1);
             return -(100 * (y - x * x) * (y - x * x) + (1 - x) * (1 - x));
         };
 
