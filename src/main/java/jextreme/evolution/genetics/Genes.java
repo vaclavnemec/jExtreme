@@ -11,17 +11,12 @@ public class Genes {
 	private final double[] genes;
 
     /**
-     *
-     * @param genes
+     * @param genes genes are essentially a double array
      */
     public Genes(final double[] genes) {
 		this.genes = genes;
 	}
 
-    /**
-     *
-     * @return
-     */
     public double[] getGenes() {
 		return this.genes;
 	}
@@ -35,10 +30,6 @@ public class Genes {
     	return this.genes[n];
 	}
 
-    /**
-     *
-     * @return
-     */
     @Override
 	public String toString() {
 		return Arrays.toString(this.genes);

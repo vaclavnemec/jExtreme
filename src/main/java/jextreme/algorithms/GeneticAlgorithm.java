@@ -1,60 +1,41 @@
 package jextreme.algorithms;
 
+import jextreme.algorithms.params.GeneticAlgorithmParams;
 import jextreme.evolution.genetics.Genes;
 import jextreme.evolution.genetics.Mutation;
 import jextreme.evolution.genetics.UniformMutation;
 import jextreme.evolution.genetics.crossover.GeneticCrossover;
 import jextreme.evolution.selector.EvolutionSelector;
 import jextreme.evolution.selector.RankEvolutionSelector;
-import jextreme.evolution.solution.FitnessFunction;
 import jextreme.evolution.solution.SolutionHolder;
-import jextreme.evolution.solution.Specimen;
 import jextreme.evolution.util.DescendingFitnessComparator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * @author vaclavnemec
  */
 public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
 
-    private final EvolutionListener evolutionListener;
-    
-    private final List<GeneticCrossover> crossovers;
-
     private final EvolutionSelector selector = new RankEvolutionSelector();
-    
+
     private final Mutation mutation = new UniformMutation();
-    
-    private final int populationSize;
-
-    private final long maximumNumberOfSteps;
-
-    private final double mutationRate;
-
-    private final double elitismRate;
+    private final GeneticAlgorithmParams params;
 
     /**
-     *
-     * @param fitnessFunction
-     * @param crossovers
-     * @param evolutionListener
-     * @param populationSize
-     * @param steps
-     * @param mutationRate
-     * @param elitismRate
+     * @param params all the parameters for the genetic algorithm
      */
-    public GeneticAlgorithm(final FitnessFunction fitnessFunction, final Specimen specimen, final List<GeneticCrossover> crossovers, EvolutionListener evolutionListener, final int populationSize,
-                            final long steps, final double mutationRate, final double elitismRate) {
-        super(fitnessFunction, specimen);
-        this.crossovers = crossovers;
-        this.populationSize = populationSize;
-        this.maximumNumberOfSteps = steps;
-        this.mutationRate = mutationRate;
-        this.elitismRate = elitismRate;
-        this.evolutionListener = evolutionListener;
+    public GeneticAlgorithm(GeneticAlgorithmParams params) {
+        super(params);
+        this.params = params;
+
+        if (params.getElitismRatio() < 0 && params.getElitismRatio() > 1) {
+            throw new IllegalArgumentException("Elitism rate not in range (0,1)");
+        }
     }
 
     // STATE OF EVOLUTION
@@ -62,20 +43,16 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
     /**
      * Evolution step counter. 0 is first.
      */
-    private int evolutionStep = 0;
+    private final AtomicInteger evolutionStep = new AtomicInteger(0);
 
-    /**
-     *
-     * @return
-     */
     @Override
     public Genes getOptimumSolution() {
         // generates null population pseudo-randomly
-        List<SolutionHolder> solutions = this.createRandomPopulation(this.populationSize);
+        List<SolutionHolder> solutions = this.createRandomPopulation(this.params.getPopulationSize());
 
         for (;;) {
             // report step
-            this.evolutionListener.reportNewStep(++this.evolutionStep);
+            this.params.getEvolutionListener().reportNewStep(evolutionStep.addAndGet(1));
 
             // simulate solutions
             this.retrieveFitness(solutions);
@@ -84,7 +61,7 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
             solutions.sort(new DescendingFitnessComparator());
 
             // report current solutions
-            this.evolutionListener.reportGeneration(solutions);
+            this.params.getEvolutionListener().reportGeneration(solutions);
 
             // end
             if (this.isComplete()) {
@@ -92,44 +69,31 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
             }
             
             // select elite member as a parent
-            final List<SolutionHolder> eliteMembers = this.getEliteMembers(solutions, this.elitismRate);
+            final List<SolutionHolder> eliteMembers = this.getEliteMembers(solutions, this.params.getElitismRatio());
 
             // new generation
-            solutions = this.createNewGeneration(this.mutationRate, solutions, this.populationSize - eliteMembers.size());
+            solutions = this.createNewGeneration(this.params.getMutationProbability(), solutions, this.params.getPopulationSize() - eliteMembers.size());
 
             solutions.addAll(eliteMembers);
 
         }
 
         solutions.sort(new DescendingFitnessComparator());
-        this.evolutionListener.reportBestSolution(solutions.iterator().next());
+        this.params.getEvolutionListener().reportBestSolution(solutions.iterator().next());
 
         this.release();
 
         return solutions.iterator().next().getGenes();
     }
 
-    private List<SolutionHolder> getEliteMembers(final List<SolutionHolder> solutions, final double elitismRate) {
+    List<SolutionHolder> getEliteMembers(final List<SolutionHolder> solutions, final double elitismRate) {
 
-        final Iterator<SolutionHolder> iterator = solutions.iterator();
-        final List<SolutionHolder> eliteMembers = new ArrayList<>();
         final long amountOfEliteSolutions = Math.round(solutions.size() * elitismRate);
 
-        for (int i = 0; i < amountOfEliteSolutions; i++) {
-            final SolutionHolder eliteMember = iterator.next();
-            eliteMembers.add(eliteMember);
-        }
-        return eliteMembers;
+        return solutions.stream().limit(amountOfEliteSolutions).collect(Collectors.toList());
     }
 
-    /**
-     *
-     * @param mutationRate
-     * @param solutions
-     * @param populationAmount
-     * @return
-     */
-    private List<SolutionHolder> createNewGeneration(final double mutationRate, final List<SolutionHolder> solutions, final Integer populationAmount) {
+    private List<SolutionHolder> createNewGeneration(final double mutationProbability, final List<SolutionHolder> solutions, final Integer populationAmount) {
         final List<SolutionHolder> newSolutions = new ArrayList<>();
 
         this.selector.initSolutions(solutions);
@@ -150,7 +114,7 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
                 if (newSolutions.size() >= populationAmount) {
                     break;
                 }
-                if (this.random.nextDouble() < mutationRate) {
+                if (this.random.nextDouble() < mutationProbability) {
                     final Genes mutatedGenes = this.mutation.mutate(g, super.getSpecimen());
                     newSolutions.add(this.createSolution(mutatedGenes));
                 } else {
@@ -175,17 +139,13 @@ public class GeneticAlgorithm extends AbstractOptimizationAlgorithm {
     }
 
     private GeneticCrossover selectCrossoverUniformly() {
-        return this.crossovers.get(this.random.nextInt(this.crossovers.size()));
+        return this.params.getCrossovers().get(this.random.nextInt(this.params.getCrossovers().size()));
     }
 
     private boolean isComplete() {
-        return this.evolutionStep >= this.maximumNumberOfSteps;
+        return this.evolutionStep.get() >= this.params.getNumberOfGenerations();
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public String toString() {
         return "GA";

@@ -20,8 +20,7 @@ public abstract class AbstractEvolutionSelector implements EvolutionSelector {
 	private final RandomAdapter random = RandomAdapterFactory.getInstance();
 
     /**
-     *
-     * @param solutions
+     * @param solutions the list of solutions to be initialized
      */
     @Override
 	public void initSolutions(final List<SolutionHolder> solutions) {
@@ -29,48 +28,9 @@ public abstract class AbstractEvolutionSelector implements EvolutionSelector {
 	}
 
     /**
-     * @param solutions
-     */
-    protected void normalize(final List<SolutionHolder> solutions) {
-		double min = Double.MAX_VALUE;
-		double max = Double.MIN_VALUE;
-		for (final SolutionHolder solution : solutions) {
-			final Double fitness = solution.getFitness();
-			min = Math.min(min, fitness);
-			max = Math.max(max, fitness);
-		}
-		double sum = 0;
-		for (final SolutionHolder solution : solutions) {
-			final double scaled = this.scale(0, 1, max, min, solution.getFitness());
-			solution.setScaledFitness(scaled);
-			sum += Math.abs(scaled);
-		}
-
-		if (sum == 0) {
-			System.err.println("Sum of scalled fitness values is 0");
-			for (final SolutionHolder solution : solutions) {
-				solution.setProbabilityToBeParent(1.0);
-			}
-		} else {
-			for (final SolutionHolder solution : solutions) {
-				solution.setProbabilityToBeParent(solution.getScaledFitness() / sum);
-			}
-		}
-	}
-
-	private double scale(final double a, final double b, final double max, final double min, final double value) {
-		final double factor = max - min;
-		if (factor == .0) {
-			return a;
-		}
-		return (b - a) * (value - min) / factor + a;
-	}
-
-    /**
-     *
-     * @param solutions
-     * @param amountOfParents
-     * @return
+     * @param solutions the parents will be selected from these solutions
+     * @param amountOfParents the about of parents we want to get
+     * @return list of the selected parents
      */
     @Override
 	public List<SolutionHolder> selectParents(final List<SolutionHolder> solutions, final int amountOfParents) {

@@ -12,12 +12,6 @@ public class UniformMutation implements Mutation {
 
     private final RandomAdapter random = RandomAdapterFactory.getInstance();
 
-    /**
-     *
-     * @param genotype
-     * @param specimen
-     * @return
-     */
     @Override
     public Genes mutate(final Genes genotype, final Specimen specimen) {
         final double[] genes = genotype.getGenes();
@@ -37,11 +31,6 @@ public class UniformMutation implements Mutation {
         return new Genes(mutatedGenes);
     }
 
-    /**
-     *
-     * @param range
-     * @return
-     */
     private double mutateGene(final Range range) {
         final double mutatedGene = this.random.nextDouble(range.getMinValue(), range.getMaxValue());
         if (range.getMinValue() > mutatedGene || range.getMaxValue() < mutatedGene) {

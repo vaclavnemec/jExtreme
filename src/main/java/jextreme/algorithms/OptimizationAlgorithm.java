@@ -8,8 +8,7 @@ import jextreme.evolution.genetics.Genes;
 public interface OptimizationAlgorithm {
 
     /**
-     *
-     * @return
+     * @return optimum solution found by the algorithm
      */
     Genes getOptimumSolution();
 }

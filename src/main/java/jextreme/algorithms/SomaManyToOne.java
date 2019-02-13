@@ -1,17 +1,13 @@
 package jextreme.algorithms;
 
+import jextreme.algorithms.params.SomaParams;
 import jextreme.evolution.genetics.Genes;
 import jextreme.evolution.genetics.Range;
-import jextreme.evolution.solution.FitnessFunction;
 import jextreme.evolution.solution.SolutionHolder;
 import jextreme.evolution.solution.Specimen;
 import jextreme.evolution.util.DescendingFitnessComparator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Vaclav
@@ -19,66 +15,38 @@ import java.util.Optional;
  */
 public class SomaManyToOne extends AbstractOptimizationAlgorithm {
 
-    private final long amountOfMigrations;
-    private final int populationSize;
-    private final double prt;
-    private final double step;
-    private final double pathLength;
 
-    /**
-     *
-     * @param pathLength
-     * @param step
-     * @param perturbationLevel
-     * @param populationSize
-     * @param amountOfMigrations
-     * @param fitnessFunction
-     */
-    public SomaManyToOne(final double pathLength, final double step, final double perturbationLevel, final int populationSize, final long amountOfMigrations,
-            final FitnessFunction fitnessFunction, final Specimen specimen) {
-        super(fitnessFunction, specimen);
-        if (pathLength <= 1) {
+    private SomaParams params;
+
+    public SomaManyToOne(SomaParams params) {
+        super(params);
+        this.params = params;
+        if (this.params.getPathLength() <= 1) {
             throw new IllegalArgumentException("Path length should not be smaller or equal to 1");
         }
-        if (step > pathLength) {
+        if (this.params.getStep() > this.params.getPathLength()) {
             throw new IllegalArgumentException("Step should not be greater than path length");
         }
-        if (step <= 0) {
+        if (this.params.getStep() <= 0) {
             throw new IllegalArgumentException("Step should be greater than 0");
         }
-        if (perturbationLevel < 0 || perturbationLevel > 1) {
+        if (this.params.getPerturbationLevel() < 0 || this.params.getPerturbationLevel() > 1) {
             throw new IllegalArgumentException("Perturbation level range is <0,1>");
         }
-        if (populationSize < 2) {
+        if (this.params.getPopulationSize() < 2) {
             throw new IllegalArgumentException("Population size should be bigger than 2");
         }
-        if (amountOfMigrations < 1) {
+        if (this.params.getAmountOfMigrations() < 1) {
             throw new IllegalArgumentException("Amount of migrations must be at least 1 or bigger");
         }
-        this.pathLength = pathLength;
-        this.step = step;
-        this.prt = perturbationLevel;
-        this.populationSize = populationSize;
-        this.amountOfMigrations = amountOfMigrations;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.vtraderplatform.evolution.EvolutionAlgorithm#evolution()
-     */
-
-    /**
-     *
-     * @return
-     */
-    
     @Override
     public Genes getOptimumSolution() {
-        List<SolutionHolder> population = this.createRandomPopulation(this.populationSize);
+        List<SolutionHolder> population = this.createRandomPopulation(this.params.getPopulationSize());
         SolutionHolder leader = null;
 
-        for (int i = 0; i < this.amountOfMigrations; i++) {
+        for (int i = 0; i < this.params.getAmountOfMigrations(); i++) {
             super.retrieveFitness(population);
 
             population.sort(new DescendingFitnessComparator());
@@ -131,18 +99,18 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
 
         final Specimen specimen = this.getSpecimen();
 
-        final double targetDistance = getDistance(leader, solution) * this.pathLength;
+        final double targetDistance = getDistance(leader, solution) * this.params.getPathLength();
         
         double distance = 0.0;
-        while ((distance += this.step) < targetDistance) {
+        while ((distance += this.params.getStep()) < targetDistance) {
             final double[] possibleSolutionGenes = new double[actualPosition.length];
 
             for (int i = 0; i < actualPosition.length; i++) {
-                if (this.random.nextDouble() >= this.prt) {
+                if (this.random.nextDouble() >= this.params.getPerturbationLevel()) {
                     if (directions[i]) {
-                        actualPosition[i] += this.step;
+                        actualPosition[i] += this.params.getStep();
                     } else {
-                        actualPosition[i] -= this.step;
+                        actualPosition[i] -= this.params.getStep();
                     }
                 }
                 final Range range = specimen.getRanges()[i];
@@ -160,10 +128,6 @@ public class SomaManyToOne extends AbstractOptimizationAlgorithm {
         return possibleSolutions;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public String toString() {
         return "SOMA";

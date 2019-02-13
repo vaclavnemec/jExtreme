@@ -4,6 +4,9 @@ import jextreme.algorithms.BlindAlgorithm;
 import jextreme.algorithms.GeneticAlgorithm;
 import jextreme.algorithms.OptimizationAlgorithm;
 import jextreme.algorithms.SomaManyToOne;
+import jextreme.algorithms.params.BlindAlgorithmParams;
+import jextreme.algorithms.params.GeneticAlgorithmParams;
+import jextreme.algorithms.params.SomaParams;
 import jextreme.evolution.genetics.Genes;
 import jextreme.evolution.genetics.Range;
 import jextreme.evolution.genetics.crossover.ArithmeticCrossover;
@@ -103,9 +106,6 @@ class ExampleRunner {
         exampleRunner.runAllAlgorithmsAndCompare(griewangk, 0.0);
     }
 
-    /**
-     * @param globalSolution
-     */
     private void runAllAlgorithmsAndCompare(FitnessFunction fitnessFunction, double globalSolution) {
         Genes best = null;
         OptimizationAlgorithm bestA = null;
@@ -130,11 +130,34 @@ class ExampleRunner {
         // specimen limits the algorithms range
         Specimen specimen = new Specimen(new Range[] {new Range(-600.0, 600.0), new Range(-600.0, 600.0)});
 
-        int POPULATION = 10;
-        int GENERATIONS = 10;
-        algorithms.add(new GeneticAlgorithm(fitnessFunction, specimen, crossovers, new EmptyEvolutionListener(), POPULATION, GENERATIONS * 250, 0.1, 0.05));
-        algorithms.add(new SomaManyToOne(400, .99, .1, POPULATION, GENERATIONS, fitnessFunction, specimen));
-        algorithms.add(new BlindAlgorithm(fitnessFunction, specimen, 40000));
+        GeneticAlgorithmParams gaParams = new GeneticAlgorithmParams();
+        gaParams.setFitnessFunction(fitnessFunction);
+        gaParams.setSpecimen(specimen);
+        gaParams.setCrossovers(crossovers);
+        gaParams.setEvolutionListener(new EmptyEvolutionListener());
+        gaParams.setPopulationSize(10);
+        gaParams.setNumberOfGenerations(10 * 250);
+        gaParams.setMutationProbability(0.1);
+        gaParams.setElitismRatio(0.05);
+
+        SomaParams somaParams = new SomaParams();
+        somaParams.setFitnessFunction(fitnessFunction);
+        somaParams.setSpecimen(specimen);
+        somaParams.setAmountOfMigrations(10);
+        somaParams.setPopulationSize(10);
+        somaParams.setPathLength(400);
+        somaParams.setStep(.99);
+        somaParams.setPerturbationLevel(0.1);
+
+        BlindAlgorithmParams blindAlgorithmParams = new BlindAlgorithmParams();
+        blindAlgorithmParams.setFitnessFunction(fitnessFunction);
+        blindAlgorithmParams.setSpecimen(specimen);
+        blindAlgorithmParams.setNumberOfEvaluations(40000);
+
+
+        algorithms.add(new GeneticAlgorithm(gaParams));
+        algorithms.add(new SomaManyToOne(somaParams));
+        algorithms.add(new BlindAlgorithm(blindAlgorithmParams));
 
         return algorithms;
     }

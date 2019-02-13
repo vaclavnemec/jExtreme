@@ -1,8 +1,8 @@
 package jextreme.algorithms;
 
+import jextreme.algorithms.params.OptimizationAlgorithmParams;
 import jextreme.evolution.genetics.Genes;
 import jextreme.evolution.genetics.Range;
-import jextreme.evolution.solution.FitnessFunction;
 import jextreme.evolution.solution.Solution;
 import jextreme.evolution.solution.SolutionHolder;
 import jextreme.evolution.solution.Specimen;
@@ -12,11 +12,7 @@ import jextreme.random.RandomAdapterFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  *
@@ -25,15 +21,14 @@ import java.util.concurrent.Future;
 abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
 
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
-    private long fitnessInvocationCount = 0;
+
+    private final OptimizationAlgorithmParams params;
 
     /**
-     *
-     * @param fitnessFunction
+     * @param params the parameters for the optimization
      */
-    AbstractOptimizationAlgorithm(FitnessFunction fitnessFunction, final Specimen specimen) {
-        this.fitnessFunction = fitnessFunction;
-        this.specimen = specimen;
+    AbstractOptimizationAlgorithm(OptimizationAlgorithmParams params) {
+        this.params = params;
     }
 
     /**
@@ -41,22 +36,16 @@ abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
      */
     final RandomAdapter random = RandomAdapterFactory.getInstance();
 
-    private final FitnessFunction fitnessFunction;
-
-    private final Specimen specimen;
-
     /**
-     *
-     * @return
+     * @return the specimen used in the optimization
      */
     Specimen getSpecimen() {
-        return this.specimen;
+        return this.params.getSpecimen();
     }
 
     /**
-     *
-     * @param genes
-     * @return
+     * @param genes the genes to be used
+     * @return solution holder with the solution
      */
     SolutionHolder createSolution(final Genes genes) {
         final Solution solution = getSolution(genes);
@@ -67,15 +56,14 @@ abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
     }
 
     private Solution getSolution(Genes genes) {
-        return () -> fitnessFunction.apply(genes);
+        return () -> params.getFitnessFunction().apply(genes);
     }
 
     /**
-     *
-     * @param amount
-     * @return
+     * @param amount the size of the population
+     * @return a random population of solutions
      */
-    List<SolutionHolder> createRandomPopulation(final Integer amount) {
+    List<SolutionHolder> createRandomPopulation(final int amount) {
         final List<SolutionHolder> population = new ArrayList<>();
         while (population.size() < amount) {
             population.add(this.createRandomSolution());
@@ -84,8 +72,7 @@ abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
     }
 
     /**
-     *
-     * @return
+     * @return random solution
      */
     SolutionHolder createRandomSolution() {
         final SolutionHolder holder = new SolutionHolder();
@@ -116,10 +103,6 @@ abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
         this.threadPool.shutdown();
     }
 
-    /**
-     *
-     * @param holders
-     */
     void retrieveFitness(final List<SolutionHolder> holders) {
         final List<Future<Double>> solutionFutures = new ArrayList<>();
         // loop over population and create time simulators to simulate it
@@ -135,7 +118,6 @@ abstract class AbstractOptimizationAlgorithm implements OptimizationAlgorithm {
         final Iterator<SolutionHolder> holderIterator = holders.iterator();
         for (final Future<Double> solutionFuture : solutionFutures) {
             try {
-                this.fitnessInvocationCount++;
                 holderIterator.next().setFitness(solutionFuture.get());
             } catch (InterruptedException | ExecutionException e) {
                 throw new IllegalStateException("Not able to simulate solution", e);

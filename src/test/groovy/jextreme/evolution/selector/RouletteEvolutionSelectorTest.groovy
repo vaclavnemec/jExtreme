@@ -23,7 +23,7 @@ class RouletteEvolutionSelectorTest extends Specification {
 
         when:
         new RouletteEvolutionSelector().normalize(solutions)
-        def sum = solutions.sum {it.getProbabilityToBeParent()}
+        double sum = solutions.sum { it.getProbabilityToBeParent() }
 
         then:
         Assert.assertEquals(1.0, sum, 0.00000000001)
@@ -68,5 +68,39 @@ class RouletteEvolutionSelectorTest extends Specification {
 
         where:
         times << (1..100)
+    }
+
+    def "Fitness values #fitnessValues to be scaled into #expScaledFitness with probability to be parent #expProbabilityToBeParent"() {
+        given:
+        List<SolutionHolder> solutions = fitnessValues.collect {
+            def sh = new SolutionHolder()
+            sh.setFitness(it)
+            return sh
+        }.toList()
+        when:
+        new RouletteEvolutionSelector().normalize(solutions)
+        then:
+        solutions.collect { it.getScaledFitness() } as double[] == expScaledFitness as double[]
+        solutions.collect { it.getProbabilityToBeParent() } as double[] == expProbabilityToBeParent as double[]
+        solutions.sum { it.getProbabilityToBeParent() } == 1.0
+        where:
+        fitnessValues          || expScaledFitness          | expProbabilityToBeParent
+        [0.0]                  || [1.0]                     | [1.0]
+        [0.0, 500]             || [0.0, 1.0]                | [0.0, 1.0]
+        [0.0, 250, 500]        || [0.0, 0.5, 1.0]           | [0.0, 0.3333333333333333, 0.6666666666666666]
+        [0.0, 20, 30, 50, 100] || [0.0, 0.2, 0.3, 0.5, 1.0] | [0.0, 0.1, 0.15, 0.25, 0.5]
+    }
+
+    def "Scaled value expected to be #exp from #value into interval from #from to #to where max is #max and min is #min"() {
+        when:
+        def res = new RouletteEvolutionSelector().scale(from, to, max, min, value)
+        then:
+        res == exp
+        where:
+        from | to | max  | min | value || exp
+        0    | 1  | 555  | 23  | 23    || 0
+        0    | 1  | 555  | 23  | 555   || 1
+        -10  | 10 | 1000 | 0   | 750   || 5
+        -10  | 10 | 1000 | 0   | 250   || -5
     }
 }

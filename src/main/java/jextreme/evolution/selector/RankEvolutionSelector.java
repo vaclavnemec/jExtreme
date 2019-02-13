@@ -6,15 +6,10 @@ import java.util.stream.IntStream;
 import jextreme.evolution.solution.SolutionHolder;
 
 /**
- *
  * @author Vaclav
  */
 public class RankEvolutionSelector extends AbstractEvolutionSelector {
 
-    /**
-     *
-     * @param solutions
-     */
     @Override
 	public void initSolutions(final List<SolutionHolder> solutions) {
 
