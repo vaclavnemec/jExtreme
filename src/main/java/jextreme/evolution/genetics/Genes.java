@@ -27,6 +27,15 @@ public class Genes {
 		return this.genes;
 	}
 
+	/**
+	 * Convinient method to get a value of the n-th dimension
+	 * @param n to identify the dimension
+	 * @return the value of the dimension
+	 */
+	public double getDimension(int n) {
+    	return this.genes[n];
+	}
+
     /**
      *
      * @return
