@@ -1,6 +1,3 @@
-/**
- * Aug 27, 2013
- */
 package jextreme.evolution.solution;
 
 import jextreme.evolution.genetics.Genes;
@@ -174,10 +171,7 @@ public class SolutionHolder {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.genes, other.genes)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.genes, other.genes);
     }
 
     

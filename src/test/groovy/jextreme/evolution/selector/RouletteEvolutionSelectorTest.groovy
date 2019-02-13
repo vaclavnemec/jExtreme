@@ -22,7 +22,7 @@ class RouletteEvolutionSelectorTest extends Specification {
         }.toList()
 
         when:
-        new RouletteEvolutionSelector().normalize(0, 1, solutions)
+        new RouletteEvolutionSelector().normalize(solutions)
         def sum = solutions.sum {it.getProbabilityToBeParent()}
 
         then:
